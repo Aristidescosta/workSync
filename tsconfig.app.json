@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+			"@/*": [
+				"./app/*"
+			],
+			"@styles/*": [
+				"./app/src/styles/*"
+			],
+			"@components/*": [
+				"./app/src/components/*"
+			],
+			"@pages/*": [
+				"./app/src/pages/*"
+			],
+			"@hooks/*": [
+				"./app/src/hooks/*"
+			],
+			"@database/*": [
+				"./app/src/database/*"
+			],
+			"@types/*": [
+				"./app/src/types/*"
+			],
+			"@routes/*": [
+				"./app/src/routes/*"
+			],
+			"@repositories/*": [
+				"./app/src/repositories/*"
+			],
+			"@utils/*": [
+				"./app/src/utils/*"
+			],
+			"@store/*": [
+				"./app/src/stores/*"
+			],
+			"@services/*": [
+				"./app/src/services/*"
+			]
+		},
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["app"]
+}
