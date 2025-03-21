@@ -20,6 +20,7 @@ export default defineConfig({
 			"@repositories": path.resolve("app/src/repositories"),
 			"@utils": path.resolve("app/src/utils"),
 			"@store": path.resolve("app/src/store"),
+			"@schemas": path.resolve("app/src/schemas"),
 		},
 	},
 	plugins: [
