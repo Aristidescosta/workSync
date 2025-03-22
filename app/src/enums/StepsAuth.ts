@@ -1,0 +1,9 @@
+export enum StepsAuth {
+    AUTHENTICATION,
+    CREATE_TEAM,
+    CREATE_PROJECT,
+    EMAIL_VERIFICATION,
+    PLANS,
+    HOME,
+    ACCOUNTRECOVEVY
+}

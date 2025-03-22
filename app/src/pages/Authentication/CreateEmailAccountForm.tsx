@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { WorkSyncIcon } from '@/react-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import {
   Form,
@@ -15,8 +15,20 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { createEmailAccountSchema } from '@/src/schemas'
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useToastMessage } from '@/react-toastify'
+import { useUserSessionStore } from '@/src/hooks'
+import { Loader2 } from 'lucide-react'
 
 export const CreateEmailAccountForm = () => {
+  const { toastMessage, ToastStatus, } = useToastMessage();
+  const signInWithGoogle = useUserSessionStore(state => state.signInWithGoogle)
+  const createUserWithEmailAndPassword = useUserSessionStore(state => state.createUserWithEmailAndPassword)
+  const setUserEmail = useUserSessionStore(state => state.setUserEmail)
+  const setUserPassword = useUserSessionStore(state => state.setUserPassword)
+  const setUserFullName = useUserSessionStore(state => state.setUserFullName)
+  const navigate = useNavigate()
+  const loadingUserSession = useUserSessionStore(state => state.loadingUserSession)
+
   const form = useForm<z.infer<typeof createEmailAccountSchema>>({
     resolver: zodResolver(createEmailAccountSchema),
     defaultValues: {
@@ -29,24 +41,52 @@ export const CreateEmailAccountForm = () => {
   })
 
   function onSubmit(data: z.infer<typeof createEmailAccountSchema>) {
-    console.log("USER DATA: ", data)
+    setUserEmail(data.email)
+    setUserFullName(data.fullName)
+    setUserPassword(data.password)
+
+    createUserWithEmailAndPassword()
+      .then((response) => {
+        console.log("RESPONSE: ", response)
+      })
+      .catch((err) => {
+        toastMessage({
+          title: err,
+          statusToast: ToastStatus.ERROR,
+          position: "top-right"
+        })
+      })
   }
 
-  // Função para garantir que o número de telefone sempre comece com "+244" e somente números depois
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value;
 
-    // Garante que o número sempre comece com "+244"
     if (input.startsWith('+244')) {
-      // Permite apenas números após o "+244" e limita a 9 números
+
       input = '+244' + input.slice(4).replace(/\D/g, '').slice(0, 9);
     } else {
-      // Se não começar com "+244", substitui a entrada por "+244" e permite números
       input = '+244' + input.replace(/\D/g, '').slice(0, 9);
     }
 
     e.target.value = input;
   };
+
+  function handleGoogleSignIn() {
+    signInWithGoogle()
+      .then((data) => {
+        navigate(`/`)
+      })
+      .catch(err => {
+        toastMessage({
+          title: err,
+          statusToast: ToastStatus.ERROR,
+          pauseOnHover: false,
+          draggable: false,
+          position: "top-right"
+        })
+      })
+  }
 
   return (
     <Form {...form}>
@@ -56,7 +96,12 @@ export const CreateEmailAccountForm = () => {
           <p className='text-sm'>Inicie sessão na sua conta</p>
 
           <div className='flex flex-col gap-4 mt-12'>
-            <Button variant={"outline"} type='button'>
+            <Button
+              variant={"outline"}
+              type='button'
+              onClick={handleGoogleSignIn}
+              disabled={loadingUserSession}
+            >
               <WorkSyncIcon
                 name='FcGoogle'
                 package='flatcolor'
@@ -120,6 +165,19 @@ export const CreateEmailAccountForm = () => {
               />
               <FormField
                 control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Senha</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} placeholder="Insira a sua senha" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
@@ -132,7 +190,16 @@ export const CreateEmailAccountForm = () => {
                 )}
               />
               <p className='text-right text-secondary'>Recuperar conta</p>
-              <Button variant={"secondary"} type='submit'>Entrar</Button>
+              <Button
+                variant={"secondary"}
+                type='submit'
+                disabled={loadingUserSession}
+              >
+                {
+                  loadingUserSession && <Loader2 className="animate-spin" />
+                }
+                {loadingUserSession ? 'Criando a conta...' : 'Criar conta'}
+              </Button>
               <p className='text-center'>Já tem uma conta? <Link to={"/auth/sign-in"} className='text-secondary'>Entrar</Link></p>
             </div>
           </div>

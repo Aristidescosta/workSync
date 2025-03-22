@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { WorkSyncIcon } from '@/react-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Loader2 } from "lucide-react"
 
 import {
     Form,
@@ -15,8 +16,18 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AuthenticationSchema } from '@/src/schemas'
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useUserSessionStore } from '@/src/hooks'
+import { useToastMessage } from '@/react-toastify'
 
 export const AuthenticationPage = () => {
+    const { toastMessage, ToastStatus, } = useToastMessage();
+    const signInWithGoogle = useUserSessionStore(state => state.signInWithGoogle)
+    const signInWithEmailAndPassword = useUserSessionStore(state => state.signInWithEmailAndPassword)
+    const setUserEmail = useUserSessionStore(state => state.setUserEmail)
+    const setUserPassword = useUserSessionStore(state => state.setUserPassword)
+    const loadingUserSession = useUserSessionStore(state => state.loadingUserSession)
+    const navigate = useNavigate()
+
     const form = useForm<z.infer<typeof AuthenticationSchema>>({
         resolver: zodResolver(AuthenticationSchema),
         defaultValues: {
@@ -25,19 +36,53 @@ export const AuthenticationPage = () => {
         },
     })
 
+    function handleGoogleSignIn() {
+        signInWithGoogle()
+            .then((data) => {
+                navigate(`/`)
+            })
+            .catch(err => {
+                toastMessage({
+                    title: err,
+                    statusToast: ToastStatus.ERROR,
+                    pauseOnHover: false,
+                    draggable: false,
+                    position: "top-right"
+                })
+            })
+    }
+
     function onSubmit(data: z.infer<typeof AuthenticationSchema>) {
-        console.log("USER DATA: ", data)
+        setUserEmail(data.email)
+        setUserPassword(data.password)
+
+        signInWithEmailAndPassword()
+            .then(async (user) => {
+                navigate(`/`)
+            })
+            .catch(err => {
+                toastMessage({
+                    title: err,
+                    statusToast: ToastStatus.ERROR,
+                    position: "top-right"
+                })
+            })
     }
 
     return (
         <Form {...form}>
             <form className='w-full p-6 min-h-screen items-center justify-center flex' onSubmit={form.handleSubmit(onSubmit)}>
                 <div className='bg-primary w-[min(36.25rem,_calc(100vw_-_2rem))] p-6 flex flex-col gap-2 rounded-md'>
-                    <h1 className='text-3xl mb-6 lowercase first-letter:uppercase'>Work<span className='lowercase first-letter:uppercase'>Sync</span></h1>
-                    <p className='text-sm'>Inicie sessão na sua conta</p>
+                    <h1 className='text-3xl mb-6 text-center lowercase first-letter:uppercase'>Work<span className='lowercase first-letter:uppercase'>Sync</span></h1>
+                    <p className='text-sm text-center'>Inicie sessão na sua conta</p>
 
                     <div className='flex flex-col gap-4 mt-12'>
-                        <Button variant={"outline"} type='button'>
+                        <Button
+                            variant={"outline"}
+                            type='button'
+                            onClick={handleGoogleSignIn}
+                            disabled={loadingUserSession}
+                        >
                             <WorkSyncIcon
                                 name='FcGoogle'
                                 package='flatcolor'
@@ -79,7 +124,16 @@ export const AuthenticationPage = () => {
                                 )}
                             />
                             <p className='text-right text-secondary'>Recuperar conta</p>
-                            <Button variant={"secondary"} type='submit'>Entrar</Button>
+                            <Button
+                                variant={"secondary"}
+                                type='submit'
+                                disabled={loadingUserSession}
+                            >
+                                {
+                                    loadingUserSession && <Loader2 className="animate-spin" />
+                                }
+                                {loadingUserSession ? 'Processando...' : 'Entrar'}
+                            </Button>
                             <p className='text-center'>Não tem uma conta? <Link to={"/auth/sign-up"} className='text-secondary'>Criar conta</Link></p>
                         </div>
                     </div>
