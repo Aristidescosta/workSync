@@ -27,6 +27,7 @@ export const WorkSyncIcon: React.FC<IconProps> = (props) => {
         size = 24,
         color = "black",
         cursor,
+        className,
         onClick
     } = props
 
@@ -56,5 +57,5 @@ export const WorkSyncIcon: React.FC<IconProps> = (props) => {
         return null;
     }
 
-    return <IconComponent onClick={onClick} size={size} color={color} cursor={cursor}/>
+    return <IconComponent onClick={onClick} size={size} color={color} cursor={cursor} className={className}/>
 };

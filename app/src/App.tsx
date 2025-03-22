@@ -2,6 +2,7 @@ import RoutesConfig from "@routes/RoutesConfig"
 import { ToastContainer } from 'react-toastify';
 import { useUserSessionStore } from "@hooks";
 import { useEffect } from "react";
+import '@utils/stringPrototype'; 
 
 function App() {
   const authenticationListener = useUserSessionStore(state => state.authenticationListener)

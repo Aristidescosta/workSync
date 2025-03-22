@@ -5,12 +5,12 @@ export const ACCOUNT_NOT_VERIFIED_MESSAGE = "Conta não verificada"
 export const ITEMS = [
     {
         title: "Dashboard",
-        url: "#",
+        url: "/",
         icon: Home,
     },
     {
         title: "Projectos",
-        url: "#",
+        url: "projects",
         icon: Inbox,
     }
 ]

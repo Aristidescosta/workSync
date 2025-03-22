@@ -1,8 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthenticationPage, CreateEmailAccountForm } from '@pages/Authentication';
-import { Home } from '@pages/home';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useUserSessionStore } from '@hooks/useUserSession';
 import { BaseLayoutPage } from '../layouts/BaseLayoutPage';
+import { Projects } from '../pages';
+import { Home } from '@pages/home';
 
 export default function RoutesConfig() {
 	const isAuthenticate = useUserSessionStore(state => state.isAuthenticationRoute)
@@ -10,33 +11,33 @@ export default function RoutesConfig() {
 	const router = createBrowserRouter([
 		{
 			path: '/',
-			element: <BaseLayoutPage />,
+			element: (
+				<BaseLayoutPage>
+					<Home />
+				</BaseLayoutPage>
+			),
 			errorElement: (
 				<h1>Not found</h1>
 			),
-			children: [
-				{
-					path: ".",
-					element: (
-						<Home />
-					)
-				}
-			],
 			loader: isAuthenticate
+		},
+		{
+			path: "/projects",
+			element: (
+				<BaseLayoutPage>
+					<Projects />
+				</BaseLayoutPage>
+			)
 		},
 		{
 			path: '/auth',
 			children: [
-				/* {
-				  path: '',  // Rota principal de autenticação, sem o "/"
-				  element: <AuthenticationPage />,
-				}, */
 				{
-					path: 'sign-in',  // Caminho relativo para o login
+					path: 'sign-in',
 					element: <AuthenticationPage />,
 				},
 				{
-					path: 'sign-up',  // Caminho relativo para o cadastro
+					path: 'sign-up',
 					element: <CreateEmailAccountForm />,
 				},
 			],

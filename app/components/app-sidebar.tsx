@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown, ChevronUp, Home, Inbox, MoreHorizontal, Search, Settings, User2 } from "lucide-react"
+import { ChevronUp, MoreHorizontal, User2 } from "lucide-react"
 
 import {
     Sidebar,
@@ -10,28 +10,37 @@ import {
     SidebarMenu,
     SidebarMenuAction,
     SidebarMenuButton,
-    SidebarMenuItem
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    useSidebar
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { useUserSessionStore } from "@/src/hooks"
-import { Avatar, AvatarImage } from "./ui/avatar"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { ITEMS, PROJECTS } from "@/src/utils/constants"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export function AppSidebar() {
 
     const user = useUserSessionStore(state => state.user)
     const logout = useUserSessionStore(state => state.logout)
     const navigate = useNavigate()
+    const { toggleSidebar } = useSidebar()
 
     const onLogout = () => {
         logout()
             .then(() => navigate("/auth/sign-in"))
     }
 
+    const onNavigateTo = (path: string) => {
+        toggleSidebar()
+        navigate(path)
+    }
+
     return (
-        <Sidebar collapsible="offcanvas">
+        <Sidebar >
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel className="text-3xl mb-8">WorSync</SidebarGroupLabel>
@@ -39,55 +48,41 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {ITEMS.map((item) => (
                                 <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild className="text-lg">
+                                        <div onClick={() => onNavigateTo(item.url)}>
+                                            <span>{item.title}</span>
+                                        </div>
+                                    </SidebarMenuButton>
                                     {
-                                        item.title.includes("Projectos") ?
-                                            (
-                                                <Collapsible defaultOpen className="group/collapsible">
-                                                    <SidebarGroup>
-                                                        <SidebarGroupLabel className="text-lg text-black" asChild>
-                                                            <CollapsibleTrigger>
-                                                                Projectos
-                                                                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                                                            </CollapsibleTrigger>
-                                                        </SidebarGroupLabel>
-                                                        <CollapsibleContent>
-                                                            <SidebarGroupContent />
-                                                            <SidebarMenu>
-                                                                {PROJECTS.map((project) => (
-                                                                    <SidebarMenuItem key={project.name}>
-                                                                        <SidebarMenuButton asChild>
-                                                                            <a href={project.url}>
-                                                                                <span>{project.name}</span>
-                                                                            </a>
-                                                                        </SidebarMenuButton>
-                                                                        <DropdownMenu>
-                                                                            <DropdownMenuTrigger asChild>
-                                                                                <SidebarMenuAction>
-                                                                                    <MoreHorizontal />
-                                                                                </SidebarMenuAction>
-                                                                            </DropdownMenuTrigger>
-                                                                            <DropdownMenuContent side="right" align="start">
-                                                                                <DropdownMenuItem>
-                                                                                    <span>Editar o projecto</span>
-                                                                                </DropdownMenuItem>
-                                                                                <DropdownMenuItem>
-                                                                                    <span>Eliminar o projecto</span>
-                                                                                </DropdownMenuItem>
-                                                                            </DropdownMenuContent>
-                                                                        </DropdownMenu>
-                                                                    </SidebarMenuItem>
-                                                                ))}
-                                                            </SidebarMenu>
-                                                        </CollapsibleContent>
-                                                    </SidebarGroup>
-                                                </Collapsible>
-                                            ) :
-                                            <SidebarMenuButton asChild className="text-lg">
-                                                <a href={item.url}>
-                                                    {/* <item.icon style={{ width: 24, height:24 }}/> */}
-                                                    <span>{item.title}</span>
-                                                </a>
-                                            </SidebarMenuButton>
+                                        item.title.includes("Projectos") &&
+                                        <SidebarMenuSub>
+                                            {
+                                                PROJECTS.map((project) => (
+                                                    <SidebarMenuSubItem key={project.url}>
+                                                        <SidebarMenuSubButton asChild>
+                                                            <div onClick={() => onNavigateTo(item.url)}>
+                                                                <span>{project.name}</span>
+                                                            </div>
+                                                        </SidebarMenuSubButton>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <SidebarMenuAction>
+                                                                    <MoreHorizontal />
+                                                                </SidebarMenuAction>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent side="right" align="start">
+                                                                <DropdownMenuItem>
+                                                                    <span>Editar o projecto</span>
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem>
+                                                                    <span>Eliminar o projecto</span>
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </SidebarMenuSubItem>
+                                                ))
+                                            }
+                                        </SidebarMenuSub>
                                     }
                                 </SidebarMenuItem>
                             ))}
@@ -101,18 +96,10 @@ export function AppSidebar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton>
-                                    {
-                                        user?.session.photoUrl ? (
-                                            <Avatar>
-                                                <AvatarImage src={user.session.photoUrl} alt={user.session.displayName} />
-                                            </Avatar>
-                                        )
-                                            :
-                                            (
-                                                <User2 />
-                                            )
-                                    }
-                                    {user?.session.displayName}
+                                    <Avatar>
+                                        <AvatarImage src={user?.session.photoUrl ?? undefined} alt={user?.session.displayName} />
+                                        <AvatarFallback>{user?.session.displayName.getInitials()}</AvatarFallback>
+                                    </Avatar>
                                     <ChevronUp className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
