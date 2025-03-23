@@ -6,6 +6,7 @@ import { Projects } from '../pages';
 import { Home } from '@pages/home';
 import { TeamPage } from '../pages/teams';
 import { WorkSpacesPage } from '../pages/workspaces';
+import { TasksPage } from '../pages/tasks';
 
 export default function RoutesConfig() {
 	const isAuthenticate = useUserSessionStore(state => state.isAuthenticationRoute)
@@ -63,7 +64,7 @@ export default function RoutesConfig() {
 			path: '/home/:teamId/:workspaceName/tasks',
 			element: (
 				<BaseLayoutPage>
-					<TeamPage />
+					<TasksPage />
 				</BaseLayoutPage>
 			),
 			errorElement: (

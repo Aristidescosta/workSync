@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import { useUserSessionStore } from "@hooks";
 import { useEffect } from "react";
 import '@utils/stringPrototype'; 
+import '@utils/helpers'; 
 
 function App() {
   const authenticationListener = useUserSessionStore(state => state.authenticationListener)
