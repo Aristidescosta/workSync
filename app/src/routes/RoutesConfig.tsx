@@ -22,6 +22,18 @@ export default function RoutesConfig() {
 			loader: isAuthenticate
 		},
 		{
+			path: '/home',
+			element: (
+				<BaseLayoutPage>
+					<Home />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
 			path: "/projects",
 			element: (
 				<BaseLayoutPage>

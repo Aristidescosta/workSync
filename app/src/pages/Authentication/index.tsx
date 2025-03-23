@@ -23,7 +23,7 @@ export const Authentication = () => {
         stepsAuth === StepsAuth.AUTHENTICATION ?
           <AuthenticationPage />
           :
-          <h1>LOGIN</h1>
+          <AuthenticationPage />
       }
     </>
   )

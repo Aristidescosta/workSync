@@ -10,6 +10,8 @@ import { Unsubscribe } from "firebase/firestore";
 import { redirect } from "react-router-dom";
 import { StepsAuth } from "../enums/StepsAuth";
 import { ACCOUNT_NOT_VERIFIED_MESSAGE } from "@utils/constants";
+import TeamService from "../services/firebase/firestore/TeamService";
+import { TeamType } from "../types/TeamType";
 
 const initalState: State = {
     userEmail: "",
@@ -47,6 +49,7 @@ interface Actions {
     isAuthenticationRoute: () => Response | null
     observingUserData: (userId: string) => Unsubscribe
     logout: () => Promise<void>
+    addMemberInvited: (teamIdInvited: string, session: UserSessionType) => Promise<TeamType>
 }
 
 export const useUserSessionStore = create<Actions & State>()(
@@ -238,6 +241,25 @@ export const useUserSessionStore = create<Actions & State>()(
                         useUserSessionStore.persist.clearStorage()
                         set({ stepsAuth: StepsAuth.AUTHENTICATION })
                     })
+            },
+            addMemberInvited: (teamIdInvited: string, session: UserSessionType) => {
+                return new Promise((resolve, reject) => {
+                    const userData: UserType = {
+                        session,
+                        teams: [],
+                        createdAt: new Date(),
+                        memberOfTeams: []
+                    };
+
+                    if (teamIdInvited) {
+                        TeamService.shared.addMemberToTeam(userData, teamIdInvited)
+                            .then(async (team) => {
+                                await UserService.shared.associateUserAsMemberToTeam(session.id, team)
+                                resolve(team)
+                            })
+                            .catch(reject)
+                    }
+                })
             },
         }),
         {

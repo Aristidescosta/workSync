@@ -30,4 +30,10 @@ export default abstract class FirestoreService extends FirebaseService {
     getCollectionNameProjects() {
         return "projects"
     }
+    getCollectionNameTeams() {
+        return "teams"
+    }
+    getCollectionNameWorkspaces() {
+        return "workspaces"
+    }
 }

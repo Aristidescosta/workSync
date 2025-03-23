@@ -1,12 +1,4 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { WorkSyncIcon } from '@/react-icons'
-import { Link, useNavigate } from 'react-router-dom'
-import { Loader2 } from "lucide-react"
-
-import {
-    Form
-} from "@/components/ui/form"
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AuthenticationSchema, createEmailAccountSchema } from '@/src/schemas'
@@ -15,16 +7,36 @@ import { useUserSessionStore } from '@/src/hooks'
 import { useToastMessage } from '@/react-toastify'
 import { useState } from 'react'
 import { FormAuth } from '@/src/enums/FormAuth'
-import { LoginForm, SignUpForm } from './components/forms'
+import { UserSessionType, UserType } from '@/src/types'
+import generateId from '@/src/services/UUID'
+import { TeamType } from '@/src/types/TeamType'
+import { useTeamStore } from '@/src/hooks/useTeam'
+import { useWorkspaceStore } from '@/src/hooks/useWorkspace'
+import { StepsAuth } from '@/src/enums/StepsAuth'
+import { LoginForm, SignUpForm } from './components'
+import { WorkSyncModal } from '@/src/components/modals'
+import { CreateWorkSpacePage } from './CreateWorkSpacePage'
+import { CreateTeamPage } from './CreateTeamPage'
 
 export const AuthenticationPage = () => {
+    const stepsAuth = useUserSessionStore(state => state.stepsAuth)
     const { toastMessage, ToastStatus, } = useToastMessage();
     const signInWithGoogle = useUserSessionStore(state => state.signInWithGoogle)
     const signInWithEmailAndPassword = useUserSessionStore(state => state.signInWithEmailAndPassword)
     const setUserEmail = useUserSessionStore(state => state.setUserEmail)
+    const setUser = useUserSessionStore(state => state.setUser)
     const setUserPassword = useUserSessionStore(state => state.setUserPassword)
-    const loadingUserSession = useUserSessionStore(state => state.loadingUserSession)
+    const addMemberInvited = useUserSessionStore(state => state.addMemberInvited)
     const navigate = useNavigate()
+    const createTeam = useTeamStore(state => state.createTeam)
+    const createNewWorkspace = useWorkspaceStore(state => state.createNewWorkspace)
+    const location = useLocation()
+    const getAllUserTeams = useTeamStore(state => state.getAllUserTeams)
+    const selectCurrentTeam = useTeamStore(state => state.selectCurrentTeam)
+    const setStepsAuth = useUserSessionStore(state => state.setStepsAuth)
+    const params = new URLSearchParams(location.search)
+    const teamId = params.get('teamId')
+    const invited = params.get('invited')
 
 
     const formLogin = useForm<z.infer<typeof AuthenticationSchema>>({
@@ -56,17 +68,101 @@ export const AuthenticationPage = () => {
         }
     }
 
+    function handleCreateTeamAndWorkspace(session: UserSessionType, teamFromInvitation: TeamType): Promise<UserType> {
+        return new Promise((resolve, reject) => {
+            const user: UserType = {
+                session,
+                teams: [],
+                memberOfTeams: [teamFromInvitation],
+                createdAt: new Date()
+            }
+
+            const teamId = generateId()
+
+            Promise.all([
+                createTeam(user, teamId, "Minha equipa"),
+                createNewWorkspace(
+                    {
+                        createdAt: new Date(),
+                        owner: user,
+                        teamId,
+                        teamName: "Minha equipa"
+                    },
+                    {
+                        workspaceId: generateId(),
+                        workspaceName: "Meu workspace",
+                        workspaceDescription: "Meu workspace",
+                        team: {
+                            createdAt: new Date(),
+                            owner: user,
+                            teamId,
+                            teamName: "Minha equipa"
+                        },
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        isClosed: false,
+                    }
+                )
+            ]).then(() => resolve(user))
+                .catch(reject)
+        })
+    }
+
     function handleGoogleSignIn() {
         signInWithGoogle()
             .then((data) => {
-                navigate(`/`)
+
+                const user = data[0]
+                const isNewUser = data[1]
+
+                if (isNewUser) {
+                    if (invited && teamId) {
+                        addMemberInvited(teamId, user.session)
+                            .then((team) => {
+                                handleCreateTeamAndWorkspace(user.session, team)
+                                    .then(() => {
+                                        user.memberOfTeams.push(team)
+                                        setUser(user)
+                                        selectCurrentTeam(team)
+                                        setStepsAuth(StepsAuth.PLANS)
+                                        //setStepsAuth(StepsAuth.HOME)
+                                        //navigate(`/home/${team.teamId}`)
+                                        //onAuthClose()
+                                    })
+                            })
+                            .catch(error => {
+                                setStepsAuth(StepsAuth.CREATE_TEAM)
+                                toastMessage({
+                                    title: error,
+                                    statusToast: ToastStatus.WARNING,
+                                    position: "top-right"
+                                })
+                            })
+                    } else {
+                        setStepsAuth(StepsAuth.CREATE_TEAM)
+                    }
+
+                } else {
+                    getAllUserTeams(user.session.id)
+                        .then(() => {
+                            setStepsAuth(StepsAuth.HOME)
+                            navigate(`/home`)
+                            /* onAuthClose() */
+                        })
+                        .catch(err => {
+                            toastMessage({
+                                title: err,
+                                statusToast: ToastStatus.ERROR,
+                                position: "top-right"
+                            })
+                        })
+                }
+                onOpenModal()
             })
             .catch(err => {
                 toastMessage({
                     title: err,
                     statusToast: ToastStatus.ERROR,
-                    pauseOnHover: false,
-                    draggable: false,
                     position: "top-right"
                 })
             })
@@ -89,6 +185,17 @@ export const AuthenticationPage = () => {
             })
     }
 
+    const [isModalOpen, setIsOpenModal] = useState(false)
+
+
+    const onCloseModal = () => {
+        setIsOpenModal(false)
+    }
+    const onOpenModal = () => {
+        setIsOpenModal(true)
+    }
+
+
     return (
         <>
             {showAuthForm === FormAuth.EMAIL_LOGIN && (
@@ -108,6 +215,33 @@ export const AuthenticationPage = () => {
                     onChangeAuthState={onChangeAuthState}
                 />
             )}
+
+            <WorkSyncModal
+                isOpen={isModalOpen}
+                onClose={() => console.log}
+                title='Bem vindo ao Work Sync'
+                subtitle='Faça login ou registe-se e desfrute de recursos exclusivos.'
+            >
+                {
+                    stepsAuth === StepsAuth.CREATE_PROJECT ?
+                        <CreateWorkSpacePage 
+                        />
+                        :
+                        stepsAuth === StepsAuth.EMAIL_VERIFICATION ?
+                            <h1>Verificar o email</h1>
+                            :
+                            stepsAuth === StepsAuth.PLANS ?
+                                <h1>Planos</h1>
+                                :
+                                stepsAuth === StepsAuth.ACCOUNTRECOVEVY ?
+                                    <h1>Recuperar conta</h1>
+                                    :
+                                    <CreateTeamPage buttonText='Seguinte' />
+
+
+                }
+            </WorkSyncModal>
+
         </>
 
     )

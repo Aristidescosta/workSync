@@ -14,8 +14,8 @@ export const WorkSyncModal = ({ children, isOpen, title, subtitle, onClose }: IW
         <Dialog onOpenChange={onClose} modal open={isOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle> {title}</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className='text-lg text-left md:text-2xl'>{title}</DialogTitle>
+                    <DialogDescription className='text-left text-xs md:text-md'>
                         {subtitle}
                     </DialogDescription>
                 </DialogHeader>
