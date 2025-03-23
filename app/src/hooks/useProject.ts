@@ -2,9 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { ProjectType } from "../types";
 import ProjectService from "../services/firebase/firestore/ProjectService";
+import { Unsubscribe } from "firebase/auth";
 
 interface Actions {
-    createProject: (project: ProjectType) => Promise<void>
+    createProject: (project: ProjectType) => Promise<void>,
+    observingAllProjects: (ownerId: string, callback: (project: ProjectType | null, isRemoving: boolean) => void) => Unsubscribe
 }
 
 interface State {
@@ -44,7 +46,24 @@ export const useProject = create<Actions & State>()(
                         loadingProjects: false
                     })
                 }
-            }
+            },
+            observingAllProjects: (ownerId: string, callback: (project: ProjectType | null, isRemoving: boolean) => void): Unsubscribe => {
+                return ProjectService.shared.getAllProjects(ownerId, (project, isRemoving) => {
+                    if (project) {
+                        set(state => ({
+                            projects: [...state.projects, project],
+                            loadingProjects: false,
+                        }))
+
+                        callback(project, isRemoving)
+                    } else {
+                        set({
+                            loadingProjects: false,
+                        })
+                        callback(null, isRemoving)
+                    }
+                })
+            },
         }),
         {
             partialize: (state) => ({ project: state.project }),

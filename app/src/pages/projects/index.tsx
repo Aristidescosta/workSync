@@ -2,25 +2,34 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { WorkSyncIcon } from "@/react-icons"
 import { useToastMessage } from "@/react-toastify"
+import { ProjectCard } from "@/src/components/ProjectCard"
 import { CreateProject } from "@/src/components/modals"
-import { useProject } from "@/src/hooks"
+import { useProject, useUserSessionStore } from "@/src/hooks"
 import generateId from "@/src/services/UUID"
 import { ProjectType } from "@/src/types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const Projects = () => {
 
   const [openModaCreateProject, setOpenModalCreateProject] = useState(false)
   const createProject = useProject(state => state.createProject)
   const infoMessage = useProject(state => state.infoMessage)
+  const user = useUserSessionStore(state => state.user)
   const errorProject = useProject(state => state.errorProject)
+  const observingAllProjects = useProject(state => state.observingAllProjects)
   const { toastMessage, ToastStatus } = useToastMessage()
   const onToggleModalCreateProject = () => {
     setOpenModalCreateProject(prev => !prev)
   }
 
-  const onCreateProject = (data: ProjectType) => {
-    createProject({ ...data, id: generateId() })
+  const [projects, setProjects] = useState<ProjectType[]>([])
+
+  const onCreateProject = (data: Omit<ProjectType, "owner">) => {
+    const owner = {
+      name: user?.session.displayName ?? "",
+      id: user?.session.id ?? ""
+    }
+    createProject({ ...data, id: generateId(), owner })
       .then(() => {
         toastMessage({
           title: infoMessage ?? "Projecto Criado com sucesso",
@@ -35,6 +44,23 @@ export const Projects = () => {
         })
       })
   }
+
+  useEffect(() => {
+
+    if (user?.session) {
+      const unsubscribe = observingAllProjects(user.session.id, (project, isRemoving) => {
+        if (project) {
+          setProjects(state => [...state, project])
+        }
+      })
+
+      return () => {
+        setProjects([])
+        unsubscribe()
+      }
+    }
+
+  }, [user?.session])
 
   return (
     <>
@@ -55,6 +81,13 @@ export const Projects = () => {
           }
         </div>
         <Separator className="my-4" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {
+            projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          }
+        </div>
       </div>
     </>
   )

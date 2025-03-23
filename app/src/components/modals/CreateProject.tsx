@@ -21,7 +21,7 @@ import { ProjectType } from "@/src/types"
 interface ICreateProjectProps {
     isOpen: boolean,
     onToggleModal: () => void
-    handleCreateProject: (data: ProjectType) => void
+    handleCreateProject: (data: Omit<ProjectType, "owner">) => void
 }
 
 export const CreateProject = ({ isOpen, onToggleModal, handleCreateProject }: ICreateProjectProps) => {
