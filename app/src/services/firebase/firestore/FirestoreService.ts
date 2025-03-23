@@ -27,4 +27,7 @@ export default abstract class FirestoreService extends FirebaseService {
     getCollectionNameUsers() {
         return "users"
     }
+    getCollectionNameProjects() {
+        return "projects"
+    }
 }

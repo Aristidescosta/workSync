@@ -37,7 +37,7 @@ export function useToastMessage() {
      */
     function toastMessage(params: toastMessageProps) {
         toast[params.statusToast](params.title, {
-            position: params.position ?? "bottom-center",
+            position: params.position ?? "top-right",
             isLoading: params.isLoading ?? false,
             closeOnClick: params.closeOnClick ?? false,
             pauseOnHover: params.pauseOnHover ?? true,
