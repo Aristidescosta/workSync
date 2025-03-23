@@ -8,9 +8,10 @@ import * as allBoxIcons from "react-icons/bi";
 import * as allIonicons5 from "react-icons/io5";
 import * as allBootstrapIcons from "react-icons/bs";
 import * as allGrommetIcons from "react-icons/gr";
+import * as allMaterialDesignIcons from "react-icons/md";
 
 interface IconProps {
-    package: "feather" | "flatcolor" | "fontawesome6" | "githubocticonsicons" | "boxicons" | "ionicons5" | "bootstrapicons" | "grommeticons";
+    package: "feather" | "flatcolor" | "fontawesome6" | "githubocticonsicons" | "boxicons" | "ionicons5" | "bootstrapicons" | "grommeticons" | "materialdesignicons";
     name: string;
     size?: number;
     color?: string;
@@ -49,6 +50,9 @@ export const WorkSyncIcon: React.FC<IconProps> = (props) => {
         IconComponent = allIonicons5[name as keyof typeof allIonicons5];
     } else if (iconPackage === "grommeticons") {
         IconComponent = allGrommetIcons[name as keyof typeof allGrommetIcons];
+    }
+    else if (iconPackage === "materialdesignicons") {
+        IconComponent = allMaterialDesignIcons[name as keyof typeof allMaterialDesignIcons];
     } else {
         return null;
     }
@@ -57,5 +61,5 @@ export const WorkSyncIcon: React.FC<IconProps> = (props) => {
         return null;
     }
 
-    return <IconComponent onClick={onClick} size={size} color={color} cursor={cursor} className={className}/>
+    return <IconComponent onClick={onClick} size={size} color={color} cursor={cursor} className={className} />
 };

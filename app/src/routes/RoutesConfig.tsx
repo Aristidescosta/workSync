@@ -5,6 +5,7 @@ import { BaseLayoutPage } from '../layouts/BaseLayoutPage';
 import { Projects } from '../pages';
 import { Home } from '@pages/home';
 import { TeamPage } from '../pages/teams';
+import { WorkSpacesPage } from '../pages/workspaces';
 
 export default function RoutesConfig() {
 	const isAuthenticate = useUserSessionStore(state => state.isAuthenticationRoute)
@@ -29,44 +30,82 @@ export default function RoutesConfig() {
 					<Home />
 				</BaseLayoutPage>
 			),
-			children: [
-				{
-					path:":teamId",
-					element: <Home />
-				},
-				{
-					path:":teamId/:workspaceName/team",
-					element: <TeamPage />
-				},
-				{
-					path:":teamId/:workspaceName/tasks",
-					element: <TeamPage />
-				},
-				{
-					path:":teamId/:workspaceName/graphs",
-					element: <TeamPage />
-				},
-				{
-					path:":teamId/:workspaceName/files",
-					element: <TeamPage />
-				},
-				{
-					path:":teamId/:workspaceName/workspaces",
-					element: <TeamPage />
-				},
-			],
 			errorElement: (
 				<h1>Not found</h1>
 			),
 			loader: isAuthenticate
 		},
 		{
-			path: "/projects",
+			path: '/home/:teamId',
 			element: (
 				<BaseLayoutPage>
-					<Projects />
+					<Home />
 				</BaseLayoutPage>
-			)
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/team',
+			element: (
+				<BaseLayoutPage>
+					<TeamPage />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/tasks',
+			element: (
+				<BaseLayoutPage>
+					<TeamPage />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/graphs',
+			element: (
+				<BaseLayoutPage>
+					<TeamPage />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/files',
+			element: (
+				<BaseLayoutPage>
+					<TeamPage />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/workspaces',
+			element: (
+				<BaseLayoutPage>
+					<WorkSpacesPage />
+				</BaseLayoutPage>
+			),
+			errorElement: (
+				<h1>Not found</h1>
+			),
+			loader: isAuthenticate
 		},
 		{
 			path: '/auth',

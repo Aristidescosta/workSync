@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import React from "react"
 import { Label } from "@/components/ui/label"
 
-export const BaseLayoutPage = ({ children }: { children: React.ReactNode }) => {
+export const BaseLayoutPage = ({ children }: { children?: React.ReactNode }) => {
     return (
         <SidebarProvider>
             <InnerLayout>{children}</InnerLayout>
