@@ -11,6 +11,8 @@ import { CardTeam } from "./components/CardTeam"
 import { Loader2 } from "lucide-react"
 import { WorkSyncModal } from "@/src/components/modals"
 import { CreateTeamPage } from "../Authentication/CreateTeamPage"
+import { useWorkspaceStore } from "@/src/hooks/useWorkspace"
+import { ITEMS } from "@/src/utils/constants"
 
 export const Home = () => {
     const user = useUserSessionStore(state => state.user)
@@ -25,7 +27,8 @@ export const Home = () => {
     const loadingTeams = useTeamStore(state => state.loadingTeams)
 
     const updateCurrentTeam = useTeamStore(state => state.updateCurrentTeam)
-
+    const team = useTeamStore(state => state.team)
+    const workspace = useWorkspaceStore(state => state.workspace)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,6 +44,18 @@ export const Home = () => {
         }
 
     }, [session])
+
+    useEffect(() => {
+        if (team) {
+            if (workspace) {
+                navigate(`/home/${team.teamId}/${encodeURI(workspace.workspaceName)}/${encodeURI(ITEMS[0].url.toLowerCase())}`)
+            } else {
+                navigate(`/home/${team.teamId}`)
+            }
+        } else {
+            navigate("/home")
+        }
+    }, [workspace, team])
 
     async function handleLogout() {
         await logout()
@@ -98,6 +113,7 @@ export const Home = () => {
                                 <CardTeam
                                     key={index}
                                     team={team}
+                                    onClick={handleOnNavigateToTeam}
                                 />
                             ))
                 }

@@ -24,7 +24,11 @@ const InnerLayout = ({ children }: { children: React.ReactNode }) => {
 
     const onLogout = () => {
         logout()
-            .then(() => navigate("/auth/sign-in"))
+            .then(() => navigate("/auth"))
+    }
+
+    const onChangeTeam = () => {
+        navigate("/home")
     }
 
     return (
@@ -53,6 +57,9 @@ const InnerLayout = ({ children }: { children: React.ReactNode }) => {
                                             </Avatar>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="w-56">
+                                            <DropdownMenuItem onClick={onChangeTeam}>
+                                                Trocar de equipa
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem onClick={onLogout}>
                                                 Terminar sessão
                                             </DropdownMenuItem>
@@ -81,6 +88,9 @@ const InnerLayout = ({ children }: { children: React.ReactNode }) => {
                                                 </Avatar>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent className="w-56">
+                                                <DropdownMenuItem onClick={onChangeTeam}>
+                                                    Trocar de equipa
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem onClick={onLogout}>
                                                     Terminar sessão
                                                 </DropdownMenuItem>
