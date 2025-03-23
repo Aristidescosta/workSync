@@ -1,4 +1,4 @@
-import { AuthenticationPage, CreateEmailAccountForm } from '@pages/Authentication';
+import { Authentication } from '@pages/Authentication';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useUserSessionStore } from '@hooks/useUserSession';
 import { BaseLayoutPage } from '../layouts/BaseLayoutPage';
@@ -31,16 +31,7 @@ export default function RoutesConfig() {
 		},
 		{
 			path: '/auth',
-			children: [
-				{
-					path: 'sign-in',
-					element: <AuthenticationPage />,
-				},
-				{
-					path: 'sign-up',
-					element: <CreateEmailAccountForm />,
-				},
-			],
+			element: <Authentication />,
 			errorElement: (
 				<h1>Not found</h1>
 			),

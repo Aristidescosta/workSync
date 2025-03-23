@@ -64,7 +64,7 @@ export const useUserSessionStore = create<Actions & State>()(
                 if (userSession) {
                     return null
                 } else {
-                    return redirect("/auth/sign-in")
+                    return redirect("/auth")
                 }
             },
             signInWithGoogle: async (): Promise<[UserType, boolean]> => {
@@ -117,50 +117,41 @@ export const useUserSessionStore = create<Actions & State>()(
                 return new Promise((resolve, reject) => {
                     const { userEmail, userPassword, userFullName } = get()
 
-                    if (userFullName === '') {
-                        set({ loadingUserSession: false });
-                    } else if (userEmail === '') {
-                        set({ loadingUserSession: false });
-                    } else if (userPassword === '' || userPassword.length < 8 || !/[A-Z]/.test(userPassword) || !/[0-9]/.test(userPassword)) {
-                        set({ loadingUserSession: false });
-                        reject('A palavra-passe não atende aos critérios de complexidade.');
-                    } else {
-                        set({ loadingUserSession: true })
-                        EmailAndPasswordService.shared.registerWithEmailAndPassword(userEmail, userPassword)
-                            .then(user => {
-                                user.displayName = userFullName
+                    set({ loadingUserSession: true })
+                    EmailAndPasswordService.shared.registerWithEmailAndPassword(userEmail, userPassword)
+                        .then(user => {
+                            user.displayName = userFullName
 
-                                const userData: UserType = {
-                                    session: user,
-                                    teams: [],
-                                    createdAt: new Date(),
-                                    memberOfTeams: []
-                                };
-                                UserService.shared.createUser(userData)
-                                    .then(() => {
-                                        set(() => ({
-                                            userSession: userData.session,
-                                            user: userData,
-                                            loadingUserSession: false,
-                                            readyToGo: null
-                                        }));
-                                        resolve(user)
-                                    })
-                                    .catch(() => {
-                                        set({
-                                            loadingUserSession: false
-                                        });
-                                        reject("Ocorreu um erro desconhecido ao salvar as informações.")
+                            const userData: UserType = {
+                                session: user,
+                                teams: [],
+                                createdAt: new Date(),
+                                memberOfTeams: []
+                            };
+                            UserService.shared.createUser(userData)
+                                .then(() => {
+                                    set(() => ({
+                                        userSession: userData.session,
+                                        user: userData,
+                                        loadingUserSession: false,
+                                        readyToGo: null
+                                    }));
+                                    resolve(user)
+                                })
+                                .catch(() => {
+                                    set({
+                                        loadingUserSession: false
                                     });
-
-                            })
-                            .catch(err => {
-                                set({
-                                    loadingUserSession: false
+                                    reject("Ocorreu um erro desconhecido ao salvar as informações.")
                                 });
-                                reject(err)
-                            })
-                    }
+
+                        })
+                        .catch(err => {
+                            set({
+                                loadingUserSession: false
+                            });
+                            reject(err)
+                        })
                 })
             },
             signInWithEmailAndPassword: async (): Promise<UserType> => {
