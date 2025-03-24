@@ -5,15 +5,19 @@ import TeamService from "../services/firebase/firestore/TeamService";
 import generateId from "../services/UUID";
 import { UserType } from "../types/UserType";
 import UserService from "../services/firebase/firestore/UserService";
-import { Unsubscribe } from "firebase/firestore";
-import { UserSessionType } from "../types/UserSessionType";
 import StorageTeamService from "../services/firebase/storage/StorageTeamService";
+import { iReactSelect } from "../interfaces/iReactSelect";
+import { MultiValue } from "react-select";
+import { Unsubscribe } from "firebase/firestore";
+import { SuggestionDataItem } from "react-mentions";
+import { UserSessionType } from "../types/UserSessionType";
 
 const initalState: State = {
-	loadingTeams: false,
+	loadingTeams: true,
 	message: "",
 	errorTeams: null,
 	teams: [],
+	usersTeamMembersSuggestions: [],
 	membersOfTeam: [],
 	teamName: "",
 	membersOfTeamClean: [],
@@ -26,10 +30,8 @@ interface State {
 	fileToUpload?: File
 	loadingTeams: boolean
 	errorTeams: string | null
-	membersOfTeam: {
-		value: UserSessionType;
-		label: string;
-	}[]
+	membersOfTeam: MultiValue<iReactSelect<UserSessionType>>
+	usersTeamMembersSuggestions: SuggestionDataItem[]
 	teams: TeamType[]
 	team?: TeamType
 	membersOfTeamClean: UserType[]
@@ -60,9 +62,7 @@ export const useTeamStore = create<Actions & State>()(
 			createTeam: (owner: UserType, teamId?: string, myTeamName?: string): Promise<TeamType> => {
 				return new Promise(async (resolve, reject) => {
 					const { teamName, fileToUpload } = get()
-					set(state => ({
-						loadingTeams: true
-					}))
+
 					if (myTeamName && teamId) {
 
 						const teamToSave = {
@@ -94,7 +94,7 @@ export const useTeamStore = create<Actions & State>()(
 							set({ message: "Introduza o nome da equipa" })
 						} else {
 							let teamToSave: TeamType
-
+	
 							if (fileToUpload) {
 								const teamImage = await StorageTeamService.shared.uploadTeamImage(owner.session.email, fileToUpload)
 								teamToSave = {
@@ -112,7 +112,7 @@ export const useTeamStore = create<Actions & State>()(
 									owner: owner
 								}
 							}
-
+	
 							try {
 								await TeamService.shared.createTeam(teamToSave)
 								await UserService.shared.associateTeamToUser(owner.session.id, teamToSave)
@@ -167,12 +167,9 @@ export const useTeamStore = create<Actions & State>()(
 				const teamId = team?.teamId ?? ""
 
 				return TeamService.shared.getAllMembers(teamId, (users) => {
-					let membersOfTeamReadyOnly: {
-						value: UserSessionType;
-						label: string;
-					}[]
-					const membersOfTeam = []
-					const userSuggestions = []
+					let membersOfTeamReadyOnly: MultiValue<iReactSelect<UserSessionType>> = []
+					const membersOfTeam: iReactSelect<UserSessionType>[] = []
+					const userSuggestions: SuggestionDataItem[] = []
 
 					for (const user of users) {
 						membersOfTeam.push({
@@ -200,6 +197,7 @@ export const useTeamStore = create<Actions & State>()(
 					membersOfTeamReadyOnly = membersOfTeam
 					set({
 						membersOfTeam: membersOfTeamReadyOnly,
+						usersTeamMembersSuggestions: userSuggestions,
 						membersOfTeamClean: users.concat(team?.owner!)
 					})
 				})
@@ -217,7 +215,7 @@ export const useTeamStore = create<Actions & State>()(
 		}),
 		{
 			partialize: (state) => ({ team: state.team, teams: state.teams }),
-			name: "@workSyncTeams",
+			name: "@zenTeams",
 			storage: createJSONStorage(() => localStorage)
 		}
 	)

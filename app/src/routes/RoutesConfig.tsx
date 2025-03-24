@@ -1,121 +1,134 @@
-import { Authentication } from '@pages/Authentication';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useUserSessionStore } from '@hooks/useUserSession';
-import { BaseLayoutPage } from '../layouts/BaseLayoutPage';
-import { Projects } from '../pages';
-import { Home } from '@pages/home';
-import { TeamPage } from '../pages/teams';
-import { WorkSpacesPage } from '../pages/workspaces';
-import { TasksPage } from '../pages/tasks';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+import HomePage from "@pages/Home";
+import HomeManageTeamPage from "@pages/Home/HomeManageTeamPage";
+import { useUserSessionStore } from "@hooks/useUserSession";
+import NotFound from '@pages/NotFound';
+import ResetPasswordPage from '../pages/Authentication/ResetPasswordPage';
 
 export default function RoutesConfig() {
+
 	const isAuthenticate = useUserSessionStore(state => state.isAuthenticationRoute)
 
 	const router = createBrowserRouter([
 		{
 			path: '/',
 			element: (
-				<BaseLayoutPage>
-					<Home />
-				</BaseLayoutPage>
+				<HomeManageTeamPage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
+			)
+		},
+		{
+			path: '/invite',
+			element: (
+				<HomeManageTeamPage />
 			),
-			loader: isAuthenticate
+			errorElement: (
+				<NotFound />
+			)
+		},
+		{
+			path: '/resetpassword',
+			element: (
+				<ResetPasswordPage />
+			),
+			errorElement: (
+				<NotFound />
+			)
 		},
 		{
 			path: '/home',
 			element: (
-				<BaseLayoutPage>
-					<Home />
-				</BaseLayoutPage>
+				<HomeManageTeamPage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
 			path: '/home/:teamId',
 			element: (
-				<BaseLayoutPage>
-					<Home />
-				</BaseLayoutPage>
+				<HomePage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
-			),
-			loader: isAuthenticate
-		},
-		{
-			path: '/home/:teamId/:workspaceName/team',
-			element: (
-				<BaseLayoutPage>
-					<TeamPage />
-				</BaseLayoutPage>
-			),
-			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
 			path: '/home/:teamId/:workspaceName/tasks',
 			element: (
-				<BaseLayoutPage>
-					<TasksPage />
-				</BaseLayoutPage>
+				<HomePage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/tasks/:taskId',
+			element: (
+				<HomePage />
+			),
+			errorElement: (
+				<NotFound />
+			),
+			loader: isAuthenticate
+		},
+		{
+			path: '/home/:teamId/:workspaceName/team',
+			element: (
+				<HomePage />
+			),
+			errorElement: (
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
 			path: '/home/:teamId/:workspaceName/graphs',
 			element: (
-				<BaseLayoutPage>
-					<TeamPage />
-				</BaseLayoutPage>
+				<HomePage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
-			path: '/home/:teamId/:workspaceName/files',
+			path: '/home/:teamId/:workspaceName/settings',
 			element: (
-				<BaseLayoutPage>
-					<TeamPage />
-				</BaseLayoutPage>
+				<HomePage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
 			path: '/home/:teamId/:workspaceName/workspaces',
 			element: (
-				<BaseLayoutPage>
-					<WorkSpacesPage />
-				</BaseLayoutPage>
+				<HomePage />
 			),
 			errorElement: (
-				<h1>Not found</h1>
+				<NotFound />
 			),
 			loader: isAuthenticate
 		},
 		{
-			path: '/auth',
-			element: <Authentication />,
-			errorElement: (
-				<h1>Not found</h1>
+			path: '/home/:teamId/:workspaceName/files',
+			element: (
+				<HomePage />
 			),
+			errorElement: (
+				<NotFound />
+			),
+			loader: isAuthenticate
 		},
-	]);
+	])
 
-	return <RouterProvider router={router} />;
+	return <RouterProvider router={router} />
 }

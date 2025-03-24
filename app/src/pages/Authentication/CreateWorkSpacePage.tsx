@@ -1,35 +1,28 @@
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { useToastMessage } from '@/react-toastify';
-import { StepsAuth } from '@/src/enums/StepsAuth';
-import { useUserSessionStore } from '@/src/hooks';
-import { useTeamStore } from '@/src/hooks/useTeam';
-import { useWorkspaceStore } from '@/src/hooks/useWorkspace';
-import { WorkspaceType } from '@/src/types/WorkspaceType';
-import { Loader2 } from 'lucide-react';
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form';
+import { ToqueButton } from "@/src/components/Button";
+import { StepsAuth } from "@/src/enums/StepsAuth";
+import { useWorkspaceStore } from "@/src/hooks/useWorkspace";
+import { useTeamStore } from "@/src/hooks/useTeam";
+import { useUserSessionStore } from "@/src/hooks/useUserSession";
+import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
+import { WorkspaceType } from "@/src/types/WorkspaceType";
+import { FormControl, FormLabel, Input, Spacer, Textarea, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 interface ICreateWorkspacePageProps {
     workspace?: WorkspaceType
     onClose?: () => void
 }
 
-
-export const CreateWorkSpacePage = (props: ICreateWorkspacePageProps) => {
+export default function CreateWorkspacePage(props: ICreateWorkspacePageProps): JSX.Element {
 
     const {
         workspace,
         onClose,
     } = props;
-
+    
     const setStepsAuth = useUserSessionStore(state => state.setStepsAuth)
     const createNewWorkspace = useWorkspaceStore(state => state.createNewWorkspace)
     const setWorkspaceName = useWorkspaceStore(state => state.setWorkspaceName)
-    const loadingWorkspaces = useWorkspaceStore(state => state.loadingWorkspaces)
     const setWorkspaceDescription = useWorkspaceStore(state => state.setWorkspaceDescription)
     const workspaceName = useWorkspaceStore(state => state.workspaceName)
     const team = useTeamStore(state => state.team)
@@ -38,7 +31,7 @@ export const CreateWorkSpacePage = (props: ICreateWorkspacePageProps) => {
     const editWorkspace = useWorkspaceStore(state => state.editWorkspace)
 
     const { toastMessage, ToastStatus, } = useToastMessage();
-    const form = useForm()
+    
     useEffect(() => {
         if (workspace) {
             setWorkspaceDescription(workspace.workspaceDescription);
@@ -63,13 +56,15 @@ export const CreateWorkSpacePage = (props: ICreateWorkspacePageProps) => {
                         setWorkspaceName("")
                         setWorkspaceDescription("")
                     } else {
-                        setStepsAuth(StepsAuth.HOME)
+                        setStepsAuth(StepsAuth.PLANS)
                     }
                 })
                 .catch(error => {
                     toastMessage({
-                        title: error,
-                        statusToast: ToastStatus.WARNING
+                        title: "Adicionar Workspace",
+                        description: error,
+                        statusToast: ToastStatus.WARNING,
+                        position: "bottom",
                     });
                 })
         }
@@ -84,62 +79,60 @@ export const CreateWorkSpacePage = (props: ICreateWorkspacePageProps) => {
                 })
                 .catch(error => {
                     toastMessage({
-                        title: error,
+                        title: "Editar Workspace",
+                        description: error,
                         statusToast: ToastStatus.WARNING,
+                        position: "bottom",
                     });
                 })
         }
     }
+
     return (
-        <Form {...form}>
-            <FormField
-                control={form.control}
-                name="..."
-                render={(field) => (
-                    <FormItem>
-                        <FormLabel>
-                            Nome do Workspace
-                        </FormLabel>
-                        <FormControl>
-                            <Input onChange={(e) => onChangeWorkspaceName(e)} placeholder="" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={form.control}
-                name="..."
-                render={(field) => (
-                    <FormItem>
-                        <FormLabel>
-                            Descrição
-                        </FormLabel>
-                        <FormControl>
-                            <Textarea onChange={(e) => onChangeWorkspaceDescription(e)} placeholder="" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <Button
-                variant={"secondary"}
-                disabled={loadingWorkspaces}
+        <VStack
+            width={'100%'}
+        >
+            <FormControl isRequired>
+                <FormLabel>
+                    Nome do Workspace
+                </FormLabel>
+                <Input
+                    type="email"
+                    placeholder="Ex: ToquePlay"
+                    _placeholder={{
+                        color: "gray.100"
+                    }}
+                    onChange={onChangeWorkspaceName}
+                    value={workspaceName}
+                />
+            </FormControl>
+            <Spacer />
+            <FormControl>
+                <FormLabel>
+                    Descrição
+                </FormLabel>
+                <Textarea
+                    placeholder="Workspace fantástico..."
+                    resize='none'
+                    _placeholder={{
+                        color: "gray.100"
+                    }}
+                    onChange={onChangeWorkspaceDescription}
+                    value={workspaceDescription}
+                />
+            </FormControl>
+
+            <ToqueButton
+                variant="primary"
+                width="100%"
+                mt="5"
+                isDisabled={workspaceName === ""}
+                isLoading={loadingUserSession}
+                _disabled={{ background: "red.100", opacity: 0.5 }}
                 onClick={workspace ? () => handleEditWorkspace(workspace) : handleCreateWorkspace}
             >
-                {
-                    loadingUserSession ?
-                        (
-                            <>
-                                <Loader2 className="animate-spin" />
-                                <Label>Criando o workspace</Label>
-                            </>
-                        )
-                        :
-                        <Label>Continuar</Label>
-                }
-            </Button>
-        </Form>
-
+                Continuar
+            </ToqueButton>
+        </VStack>
     )
 }

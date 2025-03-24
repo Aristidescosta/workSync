@@ -24,16 +24,75 @@ export default abstract class FirestoreService extends FirebaseService {
         }
     }
 
-    getCollectionNameUsers() {
-        return "users"
+    getCollectionNameCompanies() {
+        return "companies"
     }
-    getCollectionNameProjects() {
-        return "projects"
+
+    getCollectionNameActivities() {
+        return "activities"
     }
+
+    getCollectionNameInvites() {
+        return "invites"
+    }
+
     getCollectionNameTeams() {
         return "teams"
     }
+
+    getCollectionNameUsers() {
+        return "users"
+    }
+
+    getCollectionNameTasks() {
+        return "tasks"
+    }
+
+    getCollectionNameComments() {
+        return "comments"
+    }
+
     getCollectionNameWorkspaces() {
         return "workspaces"
+    }
+
+    getCollectionNameNotifications() {
+        return "notifications"
+    }
+
+    getCollectionAttachmentDocuments() {
+        return "attachmentDocuments"
+    }
+
+    getCollectionStorages(){
+        return "storages"
+    }
+
+    getCollectionPlans(){
+        return "plans"
+    }
+    
+    getCollectionIntegrations(){
+        return "integrations"
+    }
+
+    getCollectionSubscriptions(){
+        return "subscriptions"
+    }
+
+    getCollectionStorageSubscriptions(){
+        return "storageSubscriptions"
+    }
+
+    getCollectionPayments(){
+        return "payments"
+    }
+
+    getColletionTaskStats() {
+        return "statsResumeTask"
+    }
+
+    getColletionLogsActivities() {
+        return "logsActivities"
     }
 }

@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+# ZeenTaak
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+<p align="center">
+  <a href="#-sobre-o-projeto">Sobre o projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-pré-requisitos">Pré-requisitos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-começando">Começando</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-construído-com">Construído com</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<div align="center">
+  <img src="https://github.com/Aristidescosta/workSync/public/demo.png" />
+</div>
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Sobre o projeto
+Aplicação de gerenciamento de projetos com interface intuitiva e funcionalidades avançadas. A aplicação permite aos usuários criar, organizar, colaborar e monitorar o progresso de projetos de forma eficaz.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Projeto desenvolvido para teste de aptidão da mirantes (https://mirantes.io/)
+
+
+## 📋 Pré-requisitos
+- Ter o node instalado em sua máquina
+
+## 🚀 Começando
+### Clonando o projecto pelo cmd
+```
+git clone https://github.com/Aristidescosta/workSync.git
+```
+### Baixando o projecto zip
+- Precione o botão `code` (botão verde) em seguida `download zip`
+
+### 🔧 Instalação
+- Na raiz do projecto insira os comandos abaixo
+```
+  npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+ou 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
 ```
+  yarn
+```
+
+## 🛠️ Construído com
+- React
+- TypeScript
+- Chakra UI
+- Firebase
+
+Para rodar esse projecto na sua máquina, por favor digite: 
+
+```
+  npm run dev
+```
+
+```
+  yarn dev
+```
+# 🖖🏻 Como contribuir
+
+- Faça um fork desse repositório;
+- Clone esse repositório em sua máquina: git clone `https://github.com/Aristidescosta/workSync.git`
+- Cria uma branch com a sua feature: `git checkout -b minha-feature`;
+- Faça o commit dos testes: `git commit -m 'test: Nome do teste'`;
+- Faça commit das suas alterações: `git commit -m 'feat: Minha nova feature'`;
+- Faça push para a sua branch: `git push origin minha-feature`.
+
+Depois que o merge da sua pull request for feito, você pode deletar a sua branch.
+</br>
+
+⌨️ com ❤️ por [Aristides Costa](https://www.linkedin.com/in/aristides-costa-186616215/) 😊

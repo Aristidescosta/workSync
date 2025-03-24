@@ -1,9 +1,9 @@
 import { ActivityType } from "./ActivityType";
 import { AttachmentFileType } from "./AttachmentFileType";
 import { CommentType } from "./CommentType";
+import { WorkspaceType } from "./WorkspaceType";
 import { TagType } from "./TagType";
 import { UserSessionType } from "./UserSessionType";
-import { WorkspaceType } from "./WorkspaceType";
 
 export type TaskType = {
     taskId: string

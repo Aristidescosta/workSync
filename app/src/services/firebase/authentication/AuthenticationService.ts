@@ -1,6 +1,6 @@
 import { Auth, Unsubscribe, onAuthStateChanged, signOut } from "firebase/auth";
 import FirebaseService from "../FirebaseService";
-import { UserSessionType } from "@/src/types";
+import { UserSessionType } from "@/src/types/UserSessionType";
 
 export default abstract class AuthenticationService extends FirebaseService {
     abstract auth: Auth

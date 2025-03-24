@@ -1,20 +1,20 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { WorkSyncIcon } from '@/react-icons'
-import { useToastMessage } from '@/react-toastify'
-import { StepsAuth } from '@/src/enums/StepsAuth'
-import { useUserSessionStore } from '@/src/hooks'
-import { useTeamStore } from '@/src/hooks/useTeam'
-import { handleFileAttached } from '@/src/utils/helpers'
-import { Loader2 } from 'lucide-react'
-import React, { useState } from 'react'
-interface ICreateTeamPageProps {
+import { ZenTaakIcon } from "@/react-icons";
+import { ToqueButton } from "@/src/components/Button";
+import { StepsAuth } from "@/src/enums/StepsAuth";
+import { useTeamStore } from "@/src/hooks/useTeam";
+import { useUserSessionStore } from "@/src/hooks/useUserSession";
+import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
+import { handleFileAttached } from "@/src/utils/helpers";
+import { Image, VStack, Input, FormControl, FormLabel, Spacer, Text, Box } from "@chakra-ui/react";
+import { useState } from "react";
+
+interface CreateTeamPage {
     buttonText: string
     onCreateTeam?: () => void
 }
 
-export const CreateTeamPage = (props: ICreateTeamPageProps) => {
+export default function CreateTeamPage(props: CreateTeamPage): JSX.Element {
+
     const {
         buttonText,
         onCreateTeam
@@ -25,10 +25,10 @@ export const CreateTeamPage = (props: ICreateTeamPageProps) => {
     const teamName = useTeamStore(state => state.teamName)
     const setTeamName = useTeamStore(state => state.setTeamName)
     const createTeam = useTeamStore(state => state.createTeam)
-    const loadingTeams = useTeamStore(state => state.loadingTeams)
     const setFileToUpload = useTeamStore(state => state.setFileToUpload)
 
     const user = useUserSessionStore(state => state.user)
+    const loadingUserSession = useUserSessionStore(state => state.loadingUserSession)
     const setStepsAuth = useUserSessionStore(state => state.setStepsAuth)
 
     const { toastMessage, ToastStatus, } = useToastMessage();
@@ -46,9 +46,10 @@ export const CreateTeamPage = (props: ICreateTeamPageProps) => {
                 })
                 .catch(err => {
                     toastMessage({
-                        title: err,
+                        title: "Criar conta",
+                        description: err,
                         statusToast: ToastStatus.WARNING,
-                        position: "top-right",
+                        position: "bottom",
                     });
                 })
         }
@@ -75,63 +76,94 @@ export const CreateTeamPage = (props: ICreateTeamPageProps) => {
         setImageSelected("")
         setFileToUpload(undefined)
     }
+
     return (
-        <div className='flex flex-col gap-4 items-center justify-center'>
+        <VStack>
             {
                 !imageSelected ?
-                    <div
-                        className='w-32 h-32 bg-[#999] flex items-center justify-center cursor-pointer'
+                    <Box
+                        boxSize={"138px"}
+                        bg={'#999'}
+                        display={'flex'}
+                        flexShrink={0}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        cursor={'pointer'}
                         onClick={() => document.getElementById('imageCover')?.click()}
                     >
-                        <p className='text-center text-xs text-white'>
+                        <Text
+                            textAlign={'center'}
+                            color={'#fff'}
+                            fontSize={'12'}
+                        >
                             Clique para aplicar uma capa
-                        </p>
-                    </div>
+                        </Text>
+                    </Box>
                     :
-                    <div className='relative cursor-pointer'>
-                        <img src={imageSelected} alt="Imagem da equipa" className='w-32 h-32 bg-cover' />
-                        <div className='absolute top-0 right-0 m-2 z-10 bg-primary p-2 rounded-md cursor-pointer' onClick={onDeleteImageOnPreview}>
-                            <WorkSyncIcon
-                                package='feather'
-                                name='FiTrash'
-                                color='#ff2a00'
+                    <Box
+                        position='relative'
+                        cursor={'pointer'}
+                    >
+                        <Image
+                            src={imageSelected}
+                            boxSize='138px'
+                            objectFit='cover'
+                            alt='Imagem da equipa'
+                        />
+                        <Box
+                            position='absolute'
+                            top='0'
+                            right='0'
+                            margin='2'
+                            zIndex='1'
+                            bg={'#fff'}
+                            p={'2'}
+                            borderRadius={'8'}
+                            cursor='pointer'
+                            onClick={onDeleteImageOnPreview}
+                        >
+                            <ZenTaakIcon
+                                package="feather"
+                                name="FiTrash"
+                                color="ff2a00"
                                 size={16}
                             />
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
             }
-            <input
+
+            <Input
                 type='file'
                 id='imageCover'
                 onChange={previewImageTeam}
                 accept='image/png, image/jpeg, image/jpg'
                 hidden
             />
-            <div className='flex flex-col gap-4 w-full'>
-                <div className='flex flex-col gap-4 w-full'>
-                    <Label>Nome da equipa</Label>
+            <VStack
+                width={'100%'}
+            >
+                <Spacer />
+                <FormControl>
+                    <FormLabel>Nome da equipa</FormLabel>
                     <Input
+                        type="text"
                         onChange={onChangeValue}
                         value={teamName}
                     />
-                </div>
-                <Button
-                    variant={"secondary"}
-                    disabled={teamName === "" || loadingTeams}
+                </FormControl>
+
+                <ToqueButton
+                    variant="primary"
+                    width="100%"
+                    mt="5"
+                    isDisabled={teamName === ""}
+                    isLoading={loadingUserSession}
+                    _disabled={{ background: "red.100", opacity: 0.5 }}
                     onClick={handleCreateTeam}
                 >
-                    {
-                        loadingTeams ? (
-                            <>
-                                <Loader2 className="animate-spin" />
-                                <Label>Criando a equipa</Label>
-                            </>
-                        )
-                            :
-                            <Label>{buttonText}</Label>
-                    }
-                </Button>
-            </div>
-        </div>
+                    {buttonText}
+                </ToqueButton>
+            </VStack>
+        </VStack>
     )
 }
