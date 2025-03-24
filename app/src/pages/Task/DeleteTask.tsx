@@ -10,7 +10,7 @@ import {
 	Text,
 	Box,
 } from "@chakra-ui/react";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { useTaskStore } from "@/src/hooks/useTask";
 import { TaskType } from "@/src/types/TaskType";
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
@@ -93,18 +93,18 @@ export const DeleteTask: React.FC<AlertDialogProps> = ({
 					</AlertDialogBody>
 
 					<AlertDialogFooter>
-						<ToqueButton
+						<ZentaakButton
 							isLoading={loading}
 							variant="info"
 							mr={3}
 							onClick={deleteAtivity}
 						>
 							Eliminar
-						</ToqueButton>
+						</ZentaakButton>
 
-						<ToqueButton variant="primary" onClick={onClose} ml={3}>
+						<ZentaakButton variant="primary" onClick={onClose} ml={3}>
 							Fechar
-						</ToqueButton>
+						</ZentaakButton>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialogOverlay>

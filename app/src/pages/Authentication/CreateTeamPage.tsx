@@ -1,5 +1,5 @@
 import { ZenTaakIcon } from "@/react-icons";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { StepsAuth } from "@/src/enums/StepsAuth";
 import { useTeamStore } from "@/src/hooks/useTeam";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
@@ -152,7 +152,7 @@ export default function CreateTeamPage(props: CreateTeamPage): JSX.Element {
                     />
                 </FormControl>
 
-                <ToqueButton
+                <ZentaakButton
                     variant="primary"
                     width="100%"
                     mt="5"
@@ -162,7 +162,7 @@ export default function CreateTeamPage(props: CreateTeamPage): JSX.Element {
                     onClick={handleCreateTeam}
                 >
                     {buttonText}
-                </ToqueButton>
+                </ZentaakButton>
             </VStack>
         </VStack>
     )

@@ -3,7 +3,7 @@ import React from 'react'
 import { useAttachmentStore } from '@/src/hooks/useAttachment';
 import { ZenTaakModal } from '@/src/components/ZenTaakModal'
 import { HStack, Progress, Text } from '@chakra-ui/react';
-import { ToqueButton } from '@/src/components/Button';
+import { ZentaakButton } from '@/src/components/Button';
 import { useStorage } from '@/src/hooks/useStorage';
 
 import Attachments from '../../Task/Attachments'
@@ -64,7 +64,7 @@ export const ModalUploadFiles: React.FC<IModalUploadFilesProps> = ({ progress, i
                 justifyContent="flex-end"
                 width={'100%'}
             >
-                <ToqueButton
+                <ZentaakButton
                     variant="secondary"
                     width="20%"
                     borderColor={'red.100'}
@@ -75,9 +75,9 @@ export const ModalUploadFiles: React.FC<IModalUploadFilesProps> = ({ progress, i
                     isDisabled={loadingAttachment}
                 >
                     Fechar
-                </ToqueButton>
+                </ZentaakButton>
 
-                <ToqueButton
+                <ZentaakButton
                     bg={'red.100'}
                     variant="info"
                     width="20%"
@@ -88,7 +88,7 @@ export const ModalUploadFiles: React.FC<IModalUploadFilesProps> = ({ progress, i
                     isDisabled={containedFileWhoExceededTheUploadLimit || spaceExceeded || !attachmentsFile || attachmentsFile.length === 0}
                 >
                     Carregar ficheiros
-                </ToqueButton>
+                </ZentaakButton>
 
             </HStack>
         </ZenTaakModal>

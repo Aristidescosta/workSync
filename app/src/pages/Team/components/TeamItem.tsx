@@ -1,5 +1,5 @@
 import { ZenTaakIcon } from "@/react-icons";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
 import { UserType } from "@/src/types/UserType";
@@ -49,7 +49,7 @@ export function TeamItem(props: TeamItem) {
 				session?.email === user.session.email ?
 					null
 					:
-					<ToqueButton
+					<ZentaakButton
 						variant="info"
 						size="md"
 						onClick={handleSubmitInvite}
@@ -58,7 +58,7 @@ export function TeamItem(props: TeamItem) {
 					>
 						<Text mr="10px">Enviar</Text>
 						<ZenTaakIcon package="feather" name="FiSend" color="#fff" size={30} />
-					</ToqueButton>
+					</ZentaakButton>
 			}
 		</Box>
 	);

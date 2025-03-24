@@ -12,7 +12,7 @@ import {
 	MenuList,
 	Text,
 } from "@chakra-ui/react";
-import { ToqueButton } from "./Button";
+import { ZentaakButton } from "./Button";
 import { useUserSessionStore } from "../hooks/useUserSession";
 import { useTeamStore } from "../hooks/useTeam";
 import { useEffect, useState } from "react";
@@ -213,7 +213,7 @@ export function Header(props: Header) {
 						</Box>
 					}
 				/>
-				<ToqueButton
+				<ZentaakButton
 					variant="secondary"
 					border="0px"
 					bg="transparent"
@@ -250,7 +250,7 @@ export function Header(props: Header) {
 								null
 						}
 					</Box>
-				</ToqueButton>
+				</ZentaakButton>
 
 				<Flex alignItems={'center'}>
 					<Menu>

@@ -4,7 +4,7 @@ import { Box, Heading, Skeleton, Stack, Text, useDisclosure } from '@chakra-ui/r
 import { useToastMessage } from '@/src/services/chakra-ui-api/toast'
 import { useUserSessionStore } from '@/src/hooks/useUserSession'
 import { useWorkspaceStore } from '@/src/hooks/useWorkspace'
-import { ToqueButton } from '@/src/components/Button'
+import { ZentaakButton } from '@/src/components/Button'
 import { useAppStore } from '@/src/hooks/useAppStore'
 import { useTeamStore } from '@/src/hooks/useTeam'
 import { ZenTaakIcon } from '@/react-icons'
@@ -136,7 +136,7 @@ export const WorkspacePage: React.FC = () => {
                 </Heading>
                 {
                     team?.owner.session.id === SESSION?.id && creatingWorkspace.conditionalForCreateWorkspaces ?
-                        <ToqueButton
+                        <ZentaakButton
                             variant="info"
                             borderRadius="5px"
                             py="1.5rem"
@@ -153,7 +153,7 @@ export const WorkspacePage: React.FC = () => {
                                 size={16}
                             />
                             <Text ml="3">Adicionar Workspace</Text>
-                        </ToqueButton>
+                        </ZentaakButton>
                         :
                         null
                 }

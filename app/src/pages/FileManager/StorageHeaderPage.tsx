@@ -1,5 +1,5 @@
 import { ZenTaakIcon } from '@/react-icons'
-import { ToqueButton } from '@/src/components/Button'
+import { ZentaakButton } from '@/src/components/Button'
 import { useSubscriptionStore } from '@/src/hooks/useSubscription'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
@@ -32,7 +32,7 @@ export const StorageHeaderPage: React.FC<IStorageHeaderPageProps> = (props) => {
             </Heading>
 
             <Box display={'flex'} gap={4}>
-                <ToqueButton
+                <ZentaakButton
                     variant="info"
                     borderRadius="5px"
                     py="1.5rem"
@@ -49,10 +49,10 @@ export const StorageHeaderPage: React.FC<IStorageHeaderPageProps> = (props) => {
 
                     />
                     <Text ml="3">Upload de ficheiros</Text>
-                </ToqueButton>
+                </ZentaakButton>
                 {
                     storageSubscription ? null :
-                        <ToqueButton
+                        <ZentaakButton
                             variant="info"
                             borderRadius="5px"
                             py="1.5rem"
@@ -68,7 +68,7 @@ export const StorageHeaderPage: React.FC<IStorageHeaderPageProps> = (props) => {
                                 size={16}
                             />
                             <Text ml="3">Comprar espaço</Text>
-                        </ToqueButton>
+                        </ZentaakButton>
                 }
             </Box>
         </Flex>

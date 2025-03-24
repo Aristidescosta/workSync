@@ -28,7 +28,7 @@ export function sendInviteEmailToJoinTeam(request: CallableRequest<SendMailType>
 	const { emailTo, nameFrom, teamName, teamId } = request.data;
 
 	const invitedLink = `${ZEN_TAAK_DOMAIN}/invite/?teamId=${teamId}&invited=${emailTo}`;
-	const message = `Olá, \n\nVocê foi convidado por ${nameFrom} a juntar-se à sua equipa de projectos no ZenTaak. \nClique no link para juntar-se a equipa: \n${invitedLink}\n\n\nCumprimentos, \nEquipa da Toque Media, Lda`;
+	const message = `Olá, \n\nVocê foi convidado por ${nameFrom} a juntar-se à sua equipa de projectos no ZenTaak. \nClique no link para juntar-se a equipa: \n${invitedLink}\n\n\nCumprimentos, \nEquipa da WorkSync, Lda`;
 
 	const mailOptions: Mail.Options = {
 		from: "notification@app.zentaak.com",

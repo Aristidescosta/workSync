@@ -1,5 +1,5 @@
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
-import { ToqueButton } from "../../components/Button";
+import { ZentaakButton } from "../../components/Button";
 import { Box, Text, Button } from "@chakra-ui/react";
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
 import { StepsAuth } from "@/src/enums/StepsAuth";
@@ -42,7 +42,7 @@ export default function EmailVerificationPage(): JSX.Element {
             flexDir='column'
         >
             Verifique a sua caixa de correio para confirmar o seu e-mail e validar a sua conta.
-            <ToqueButton
+            <ZentaakButton
                 variant="primary"
                 size="sm"
                 mt="30px"
@@ -52,7 +52,7 @@ export default function EmailVerificationPage(): JSX.Element {
                 <Text>
                     Já verifiquei
                 </Text>
-            </ToqueButton>
+            </ZentaakButton>
 
             <Button
                 m={2}

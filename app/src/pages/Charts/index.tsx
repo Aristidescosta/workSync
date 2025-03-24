@@ -53,28 +53,6 @@ export default function GraphPage(): JSX.Element {
                 <Heading as="h1" fontSize="22px">
                     Dashboard ● {team?.teamName}
                 </Heading>
-
-                {/* <Box>
-                    <ToqueButton
-                        variant="outline"
-                        borderRadius="5px"
-                        py="1.5rem"
-                        width="15rem"
-                        onClick={() => { }}
-                        loadingText="Filtrando"
-                        isLoading={false}
-                        mr={5}
-                        borderColor={"#ccc"}
-                        color="#000"
-                    >
-                        <ZenTaakIcon
-                            package="feather"
-                            name="FiFilter"
-                            size={18}
-                        />
-                        <Text ml="3">Filtrar o relatório</Text>
-                    </ToqueButton>
-                </Box> */}
             </Box>
 
             <HStack

@@ -1,5 +1,5 @@
 import { ZenTaakIcon } from "@/react-icons"
-import { ToqueButton } from "@/src/components/Button"
+import { ZentaakButton } from "@/src/components/Button"
 import { Box, Text, Link } from "@chakra-ui/react"
 
 interface SocialAuth {
@@ -26,7 +26,7 @@ export default function SocialAuth(props: SocialAuth): JSX.Element {
 
     return (
         <>
-            <ToqueButton
+            <ZentaakButton
                 variant="secondary"
                 width="100%"
                 mt="5"
@@ -34,7 +34,7 @@ export default function SocialAuth(props: SocialAuth): JSX.Element {
             >
                 <ZenTaakIcon package="flatcolor" name="FcGoogle" size={16} />
                 <Text ml="3">{googleTitleButton}</Text>
-            </ToqueButton>
+            </ZentaakButton>
             {
                 type === 1 ?
                     <Box

@@ -1,7 +1,7 @@
 import { Box, HStack, Heading, Text, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ZenTaakIcon } from "@/react-icons";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { useTaskStore } from "@/src/hooks/useTask";
 import { useAppStore } from "@/src/hooks/useAppStore";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
@@ -192,7 +192,7 @@ export default function TaskPage() {
 				</Heading>
 				{
 					team?.owner.session.id === session?.id ?
-						<ToqueButton
+						<ZentaakButton
 							variant="info"
 							borderRadius="5px"
 							py="1.5rem"
@@ -210,7 +210,7 @@ export default function TaskPage() {
 								size={16}
 							/>
 							<Text ml="3">Adicionar Tarefa</Text>
-						</ToqueButton>
+						</ZentaakButton>
 						:
 						null
 				}

@@ -11,7 +11,7 @@ interface ButtonProps extends ChakraButtonProps {
 	iconRight?: IconType;
 }
 
-export function ToqueButton({
+export function ZentaakButton({
 	children,
 	variant,
 	iconLeft,

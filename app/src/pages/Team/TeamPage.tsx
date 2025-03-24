@@ -1,5 +1,5 @@
 import { ZenTaakIcon } from "@/react-icons";
-import { ToqueButton } from "@components/Button";
+import { ZentaakButton } from "@components/Button";
 import { Heading, Spinner, Box, Text, useDisclosure } from "@chakra-ui/react";
 import AddUserToTeamPage from "./AddUserToTeamPage";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
@@ -121,7 +121,7 @@ export default function TeamPage() {
 
 				{
 					session?.id === team?.owner.session.id ?
-						<ToqueButton
+						<ZentaakButton
 							variant="info"
 							borderRadius="5px"
 							py="1.5rem"
@@ -136,7 +136,7 @@ export default function TeamPage() {
 								size={16}
 							/>
 							<Text ml="3">Adicionar Equipa</Text>
-						</ToqueButton>
+						</ZentaakButton>
 						:
 						null
 				}

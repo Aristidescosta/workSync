@@ -2,7 +2,7 @@
 import { ZenTaakIcon } from "@/react-icons";
 
 import { Avatar, Box, Text } from "@chakra-ui/react";
-import { ToqueButton } from "../../components/Button";
+import { ZentaakButton } from "../../components/Button";
 import { InviteType } from "@/src/types/InviteType";
 
 interface InboxItem {
@@ -63,7 +63,7 @@ export default function InboxItem(props: InboxItem) {
 			</Box>
 
 			<Box display="flex" justifyContent="flex-end" mt="10px">
-				<ToqueButton
+				<ZentaakButton
 					variant="outline"
 					size="sm"
 					mt="10px"
@@ -79,9 +79,9 @@ export default function InboxItem(props: InboxItem) {
 						size={16}
 					/>
 					<Text ml="10px">Rejeitar</Text>
-				</ToqueButton>
+				</ZentaakButton>
 
-				<ToqueButton
+				<ZentaakButton
 					variant="info"
 					bg={'#111'}
 					size="sm"
@@ -97,7 +97,7 @@ export default function InboxItem(props: InboxItem) {
 						color="#fff"
 						size={16}
 					/>
-				</ToqueButton>
+				</ZentaakButton>
 			</Box>
 		</Box>
 	);

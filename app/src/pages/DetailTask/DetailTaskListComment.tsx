@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { Box, Text, Flex, HStack, Input } from "@chakra-ui/react";
 import DetailTaskMyComment from "./components/DetailTaskMyComment";
 import DetailTaskTheirComment from "./components/DetailTaskTheirComment";
@@ -333,7 +333,7 @@ export default function DetailTaskListComment(props: DetailTaskListComment): JSX
                     }
                 </HStack>
                 <Flex>
-                    <ToqueButton
+                    <ZentaakButton
                         variant="ghost"
                         onClick={handleAttachOnComments}
                     >
@@ -342,8 +342,8 @@ export default function DetailTaskListComment(props: DetailTaskListComment): JSX
                             name="GoPaperclip"
                             size={20}
                         />
-                    </ToqueButton>
-                    <ToqueButton
+                    </ZentaakButton>
+                    <ZentaakButton
                         bg={'red.100'}
                         variant="info"
                         py={1}
@@ -354,7 +354,7 @@ export default function DetailTaskListComment(props: DetailTaskListComment): JSX
                         onClick={handleSaveUserComment}
                     >
                         Enviar comentário
-                    </ToqueButton>
+                    </ZentaakButton>
                 </Flex>
             </HStack>
             {

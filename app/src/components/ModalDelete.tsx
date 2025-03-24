@@ -2,7 +2,7 @@ import { Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 
 import React from 'react'
 
-import { ToqueButton } from './Button';
+import { ZentaakButton } from './Button';
 
 interface IModalDeleteProps {
     title: string;
@@ -37,8 +37,8 @@ export const ModalDelete: React.FC<IModalDeleteProps> = ({ loading ,buttonTitle,
                     </ModalBody>
                 }
                 <ModalFooter justifyContent={'space-around'} gap={4} alignItems={'center'}>
-                    <ToqueButton onClick={() => secondaryAction(0)} isLoading={loading} variant='outline'>{buttonSecundaryTitle ? buttonSecundaryTitle : 'Cancelar'}</ToqueButton>
-                    <ToqueButton onClick={() => primaryAction(buttonValue)} isLoading={loading} variant={buttonValue === 0 ? 'secondary' : 'primary'}>{buttonTitle}</ToqueButton>
+                    <ZentaakButton onClick={() => secondaryAction(0)} isLoading={loading} variant='outline'>{buttonSecundaryTitle ? buttonSecundaryTitle : 'Cancelar'}</ZentaakButton>
+                    <ZentaakButton onClick={() => primaryAction(buttonValue)} isLoading={loading} variant={buttonValue === 0 ? 'secondary' : 'primary'}>{buttonTitle}</ZentaakButton>
                 </ModalFooter>
             </ModalContent>
         </Modal>

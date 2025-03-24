@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { ZenTaakModal } from "@/src/components/ZenTaakModal";
 import { useTaskStore } from "@/src/hooks/useTask";
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
@@ -192,7 +192,7 @@ export default function CreateTaskPage(props: CreateTaskPage) {
 				justifyContent="flex-end"
 				width={'100%'}
 			>
-				<ToqueButton
+				<ZentaakButton
 					variant="secondary"
 					width="20%"
 					borderColor={'red.100'}
@@ -202,9 +202,9 @@ export default function CreateTaskPage(props: CreateTaskPage) {
 					onClick={handleClose}
 				>
 					Fechar
-				</ToqueButton>
+				</ZentaakButton>
 
-				<ToqueButton
+				<ZentaakButton
 					bg={'red.100'}
 					variant="info"
 					width="20%"
@@ -215,7 +215,7 @@ export default function CreateTaskPage(props: CreateTaskPage) {
 					onClick={handleCreateTask}
 				>
 					{task ? "Actualizar" : "Criar tarefa"}
-				</ToqueButton>
+				</ZentaakButton>
 			</HStack>
 		</ZenTaakModal>
 	);

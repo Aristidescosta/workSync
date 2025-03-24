@@ -1,4 +1,4 @@
-import { ToqueButton } from '@/src/components/Button';
+import { ZentaakButton } from '@/src/components/Button';
 import { useUserSessionStore } from '@/src/hooks/useUserSession';
 import { Box, Text, Input, FormControl, FormLabel, Image, InputGroup, IconButton, InputRightElement } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
@@ -125,7 +125,7 @@ export default function ResetPasswordPage(): JSX.Element {
                             </InputRightElement>
                         </InputGroup>
                     </FormControl>
-                    <ToqueButton
+                    <ZentaakButton
                         variant='primary'
                         width='100%'
                         isLoading={loading}
@@ -133,7 +133,7 @@ export default function ResetPasswordPage(): JSX.Element {
                         onClick={resetPassword}
                     >
                         Redefinir
-                    </ToqueButton>
+                    </ZentaakButton>
                 </Box>
             </Box >
         </Box>

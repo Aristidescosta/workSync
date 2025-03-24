@@ -1,4 +1,4 @@
-import { ZenTaakResponseError, toquemediaInstancePayment } from "@/axios";
+import { ZenTaakResponseError, workSyncInstancePayment } from "@/axios";
 import { McxDataParamsType } from "@/src/types/McxDataParamsType";
 import { McxDataResponseType } from "@/src/types/McxDataResponseType";
 
@@ -14,7 +14,7 @@ export class MulticaixaExpressGpoApi {
 
     requestPayment(data: McxDataParamsType): Promise<McxDataResponseType> {
         return new Promise((resolve, reject) => {
-            toquemediaInstancePayment
+            workSyncInstancePayment
                 .post<McxDataResponseType>(this.requestEndpoint, data)
                 .then((response) => {
                     resolve(response.data)

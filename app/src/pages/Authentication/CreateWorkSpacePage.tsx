@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { StepsAuth } from "@/src/enums/StepsAuth";
 import { useWorkspaceStore } from "@/src/hooks/useWorkspace";
 import { useTeamStore } from "@/src/hooks/useTeam";
@@ -98,7 +98,7 @@ export default function CreateWorkspacePage(props: ICreateWorkspacePageProps): J
                 </FormLabel>
                 <Input
                     type="email"
-                    placeholder="Ex: ToquePlay"
+                    placeholder="Ex: Mirantes"
                     _placeholder={{
                         color: "gray.100"
                     }}
@@ -122,7 +122,7 @@ export default function CreateWorkspacePage(props: ICreateWorkspacePageProps): J
                 />
             </FormControl>
 
-            <ToqueButton
+            <ZentaakButton
                 variant="primary"
                 width="100%"
                 mt="5"
@@ -132,7 +132,7 @@ export default function CreateWorkspacePage(props: ICreateWorkspacePageProps): J
                 onClick={workspace ? () => handleEditWorkspace(workspace) : handleCreateWorkspace}
             >
                 Continuar
-            </ToqueButton>
+            </ZentaakButton>
         </VStack>
     )
 }

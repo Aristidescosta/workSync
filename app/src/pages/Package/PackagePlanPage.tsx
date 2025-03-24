@@ -3,7 +3,7 @@ import Package from "./Package";
 import { usePlan } from "@/src/hooks/usePlanStore";
 import { useState } from "react";
 import { PlanType, StoragePlanType } from "@/src/types/PlanType";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { StepsAuth } from "@/src/enums/StepsAuth";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "@/src/hooks/useAppStore";
@@ -98,7 +98,7 @@ export default function PackagePlanPage(props: PackagePlanPage): JSX.Element {
                     />
                 ))
             }
-            <ToqueButton
+            <ZentaakButton
                 mt={2}
                 w='100%'
                 variant={"primary"}
@@ -112,7 +112,7 @@ export default function PackagePlanPage(props: PackagePlanPage): JSX.Element {
                 >
                     {`Continuar ${planSelected ? "com Plano " + planSelected.planName : ""}`}
                 </Text>
-            </ToqueButton>
+            </ZentaakButton>
             {
                 planType === "subscription" ?
                     <Flex

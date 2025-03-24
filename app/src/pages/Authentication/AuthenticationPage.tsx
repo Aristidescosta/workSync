@@ -4,7 +4,7 @@ import {
 	Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import DividerAuth from "./components/DividirAuth";
 
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
@@ -326,7 +326,7 @@ export default function AuthenticationPage() {
 
 			<Spacer height={4} />
 
-			<ToqueButton
+			<ZentaakButton
 				variant="primary"
 				width="100%"
 				mt="5"
@@ -336,10 +336,10 @@ export default function AuthenticationPage() {
 				onClick={handleAuthOperation}
 			>
 				{handleTextButtonAuthOperation()}
-			</ToqueButton>
+			</ZentaakButton>
 			{
 				sendVerificationLink ?
-					<ToqueButton
+					<ZentaakButton
 						mt={2}
 						variant='link'
 						onClick={handleSendEmailVerification}
@@ -352,7 +352,7 @@ export default function AuthenticationPage() {
 						>
 							Reenviar e-mail de verificação
 						</Text>
-					</ToqueButton>
+					</ZentaakButton>
 					: null
 			}
 			<DividerAuth />

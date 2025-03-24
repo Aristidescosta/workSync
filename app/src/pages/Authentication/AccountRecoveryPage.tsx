@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { StepsAuth } from "@/src/enums/StepsAuth";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
 import { Box, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
@@ -47,7 +47,7 @@ export default function AccountRecoveryPage(): JSX.Element {
                 <Input id="email" type="email" ref={refEmail} />
             </FormControl>
 
-            <ToqueButton
+            <ZentaakButton
                 variant="primary"
                 width="100%"
                 mb="5"
@@ -56,7 +56,7 @@ export default function AccountRecoveryPage(): JSX.Element {
                 onClick={onSubmit}
             >
                 Enviar
-            </ToqueButton>
+            </ZentaakButton>
         </Box>
     );
 }

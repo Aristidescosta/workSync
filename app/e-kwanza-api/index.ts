@@ -1,4 +1,4 @@
-import { ZenTaakResponseError, toquemediaInstancePayment } from "@/axios";
+import { ZenTaakResponseError, workSyncInstancePayment } from "@/axios";
 import { EkwanzaDataParamsType } from "@/src/types/EkwanzaDataParamsType";
 import { EkwanzaDataResponseType } from "@/src/types/EkwanzaDataResponseType";
 
@@ -16,7 +16,7 @@ export class EKwanzaApi {
 
     requestPayment(data: EkwanzaDataParamsType): Promise<EkwanzaDataResponseType> {
         return new Promise((resolve, reject) => {
-            toquemediaInstancePayment
+            workSyncInstancePayment
                 .post<EkwanzaDataResponseType>(this.requestEndpoint, data)
                 .then((response) => {
                     resolve(response.data)
@@ -30,7 +30,7 @@ export class EKwanzaApi {
     checkPaymentStatus(reference: number): Promise<{ Status: number, Amount: number }> {
         return new Promise((resolve, reject) => {
             const env = window.location.hostname === "localhost" ? "dev" : "prd"
-            toquemediaInstancePayment
+            workSyncInstancePayment
                 .get<{ Status: number, Amount: number }>(`${this.checkStatus}/${env}/${reference}`)
                 .then((response) => {
                     resolve(response.data)

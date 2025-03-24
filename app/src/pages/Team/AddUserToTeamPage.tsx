@@ -4,7 +4,7 @@ import { FormLabel, InputGroup, Input, InputRightElement, Button, Box, Spinner, 
 import { useUserStore } from "@/src/hooks/useUser";
 import { useState } from "react";
 import { TeamItem } from "./components/TeamItem";
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { useInviteUserStore } from "@/src/hooks/useInviteUser";
 import { useUserSessionStore } from "@/src/hooks/useUserSession";
 import { useTeamStore } from "@/src/hooks/useTeam";
@@ -201,7 +201,7 @@ export default function AddUserToTeamPage(props: AddUserToTeamPage) {
 									emailSent ?
 										<Text>Convite enviado</Text>
 										:
-										<ToqueButton
+										<ZentaakButton
 											variant="info"
 											size="sm"
 											isLoading={sendingEmail}
@@ -215,7 +215,7 @@ export default function AddUserToTeamPage(props: AddUserToTeamPage) {
 												color="#fff"
 												size={18}
 											/>
-										</ToqueButton>
+										</ZentaakButton>
 								}
 							</HStack>
 							:

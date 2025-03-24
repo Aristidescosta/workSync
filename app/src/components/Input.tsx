@@ -4,7 +4,7 @@ interface CustomInputProps extends InputProps {
   label: string;
 }
 
-export function ToqueInput({ label, ...rest }: CustomInputProps) {
+export function ZentaakInput({ label, ...rest }: CustomInputProps) {
   return (
     <Box>
       <Text as="label" fontSize="15px">

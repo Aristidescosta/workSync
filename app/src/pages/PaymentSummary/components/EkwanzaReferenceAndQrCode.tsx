@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
 
 interface EkwanzaReferenceAndQrCode {
@@ -36,7 +36,7 @@ export default function EkwanzaReferenceAndQrCode(props: EkwanzaReferenceAndQrCo
                 src="https://cdn.britannica.com/17/155017-050-9AC96FC8/Example-QR-code.jpg"
                 height={40}
             />
-            <ToqueButton
+            <ZentaakButton
                 variant="info"
                 borderRadius="5px"
                 py="1.5rem"
@@ -52,7 +52,7 @@ export default function EkwanzaReferenceAndQrCode(props: EkwanzaReferenceAndQrCo
                 >
                     Já autorizei
                 </Text>
-            </ToqueButton>
+            </ZentaakButton>
             <Text 
                 color={'red.200'}
                 fontWeight={'bold'}

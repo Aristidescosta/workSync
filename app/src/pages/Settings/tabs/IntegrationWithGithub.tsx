@@ -1,4 +1,4 @@
-import { ToqueButton } from "@/src/components/Button";
+import { ZentaakButton } from "@/src/components/Button";
 import { useIntegrationStore } from "@/src/hooks/useIntegration";
 import { useWorkspaceStore } from "@/src/hooks/useWorkspace";
 import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
@@ -171,7 +171,7 @@ export default function IntegrationWithGithub(): JSX.Element {
                     />
                 </FormControl>
             </Box>
-            <ToqueButton
+            <ZentaakButton
                 variant='primary'
                 mt={'auto'}
                 width='150px'
@@ -180,7 +180,7 @@ export default function IntegrationWithGithub(): JSX.Element {
                 onClick={integrationWithGithub ? onEdit : onSave}
             >
                 {integrationWithGithub ? 'Editar' : 'Salvar'}
-            </ToqueButton>
+            </ZentaakButton>
         </Box>
     )
 }

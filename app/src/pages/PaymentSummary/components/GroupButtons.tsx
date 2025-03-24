@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
 import React from 'react'
-import { ToqueButton } from '../../../components/Button'
+import { ZentaakButton } from '../../../components/Button'
 
 interface IPaymentCardProps {
     buttonTitle: string
@@ -20,7 +20,7 @@ export const GroupButtons: React.FC<IPaymentCardProps> = (props) => {
 
     return (
         <Flex gap={4} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'} w={'full'}>
-            <ToqueButton
+            <ZentaakButton
                 variant="info"
                 borderRadius="5px"
                 py={6}
@@ -33,14 +33,14 @@ export const GroupButtons: React.FC<IPaymentCardProps> = (props) => {
                 isDisabled={isDisabled}
             >
                 <Text ml="3">{buttonTitle}</Text>
-            </ToqueButton>
-            <ToqueButton
+            </ZentaakButton>
+            <ZentaakButton
                 variant='ghost'
                 px={6}
                 onClick={onBack}
             >
                 <Text ml="3">Fechar</Text>
-            </ToqueButton>
+            </ZentaakButton>
         </Flex>
     )
 }

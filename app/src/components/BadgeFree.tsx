@@ -1,6 +1,6 @@
 import { ZenTaakIcon } from "@/react-icons"
 import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react"
-import { ToqueButton } from "./Button"
+import { ZentaakButton } from "./Button"
 
 interface BadgeFree {
     info: string
@@ -40,7 +40,7 @@ export default function BadgeFree(props: BadgeFree): JSX.Element {
                         >
                             {props.info}
                         </Text>
-                        <ToqueButton
+                        <ZentaakButton
                             variant={"link"}
                             color={'red.200'}
                             as={'u'}
@@ -49,7 +49,7 @@ export default function BadgeFree(props: BadgeFree): JSX.Element {
                             onClick={props.onClickToBuyAPlan}
                         >
                             Actualizar o plano
-                        </ToqueButton>
+                        </ZentaakButton>
                     </Box>
                     :
                     <Box
@@ -62,7 +62,7 @@ export default function BadgeFree(props: BadgeFree): JSX.Element {
                         >
                             {props.info}
                         </Text>
-                        <ToqueButton
+                        <ZentaakButton
                             variant={"link"}
                             color={'red.200'}
                             as={'u'}
@@ -71,7 +71,7 @@ export default function BadgeFree(props: BadgeFree): JSX.Element {
                             onClick={props.onClickToRenewPlan}
                         >
                             Renovar o plano
-                        </ToqueButton>
+                        </ZentaakButton>
                     </Box>
             }
         </HStack>

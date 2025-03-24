@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { PlanType, StoragePlanType } from '../../types/PlanType'
 
-import { ToqueButton } from '../../components/Button'
+import { ZentaakButton } from '../../components/Button'
 import { RadioCard } from './components/RadioCard'
 import { usePaymentStore } from '@/src/hooks/usePayment'
 
@@ -218,7 +218,7 @@ export const TabPaymentSummary: React.FC<ITabPaymentSummaryProps> = (props) => {
                     </RadioGroup>
                 </Flex>
 
-                <ToqueButton
+                <ZentaakButton
                     variant="info"
                     borderRadius="5px"
                     py="1.5rem"
@@ -231,7 +231,7 @@ export const TabPaymentSummary: React.FC<ITabPaymentSummaryProps> = (props) => {
                     onClick={() => setTabIndex(1)}
                 >
                     <Text ml="3">{`Continuar com ${selectedMethod === '1' ? 'E-KWANZA' : 'Multicaixa Express'}`.toUpperCase()}</Text>
-                </ToqueButton>
+                </ZentaakButton>
 
                 <Button
                     variant='link'
