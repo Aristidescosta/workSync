@@ -1,248 +1,381 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { AuthenticationSchema, createEmailAccountSchema } from '@/src/schemas'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useUserSessionStore } from '@/src/hooks'
-import { useToastMessage } from '@/react-toastify'
-import { useState } from 'react'
-import { FormAuth } from '@/src/enums/FormAuth'
-import { UserSessionType, UserType } from '@/src/types'
-import generateId from '@/src/services/UUID'
-import { TeamType } from '@/src/types/TeamType'
-import { useTeamStore } from '@/src/hooks/useTeam'
-import { useWorkspaceStore } from '@/src/hooks/useWorkspace'
-import { StepsAuth } from '@/src/enums/StepsAuth'
-import { LoginForm, SignUpForm } from './components'
-import { WorkSyncModal } from '@/src/components/modals'
-import { CreateWorkSpacePage } from './CreateWorkSpacePage'
-import { CreateTeamPage } from './CreateTeamPage'
+import {
+	Box,
+	Spacer,
+	Text
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { ZentaakButton } from "@/src/components/Button";
+import DividerAuth from "./components/DividirAuth";
 
-export const AuthenticationPage = () => {
-    const stepsAuth = useUserSessionStore(state => state.stepsAuth)
-    const { toastMessage, ToastStatus, } = useToastMessage();
-    const signInWithGoogle = useUserSessionStore(state => state.signInWithGoogle)
-    const signInWithEmailAndPassword = useUserSessionStore(state => state.signInWithEmailAndPassword)
-    const setUserEmail = useUserSessionStore(state => state.setUserEmail)
-    const setUser = useUserSessionStore(state => state.setUser)
-    const setUserPassword = useUserSessionStore(state => state.setUserPassword)
-    const addMemberInvited = useUserSessionStore(state => state.addMemberInvited)
-    const navigate = useNavigate()
-    const createTeam = useTeamStore(state => state.createTeam)
-    const createNewWorkspace = useWorkspaceStore(state => state.createNewWorkspace)
-    const location = useLocation()
-    const getAllUserTeams = useTeamStore(state => state.getAllUserTeams)
-    const selectCurrentTeam = useTeamStore(state => state.selectCurrentTeam)
-    const setStepsAuth = useUserSessionStore(state => state.setStepsAuth)
-    const params = new URLSearchParams(location.search)
-    const teamId = params.get('teamId')
-    const invited = params.get('invited')
+import { useToastMessage } from "@/src/services/chakra-ui-api/toast";
+import SocialAuth from "./components/SocialAuth";
+import { FormAuth } from "@/src/enums/FormAuth";
+import CreateEmailAccountForm from "./components/CreateEmailAccountForm";
+import LoginEmailAccountForm from "./components/LoginEmailAccountForm";
+import { useUserSessionStore } from "@hooks/useUserSession";
+import { useAppStore } from "@/src/hooks/useAppStore";
+import { StepsAuth } from "@/src/enums/StepsAuth";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useTeamStore } from "@/src/hooks/useTeam";
+import { UserType } from "@/src/types/UserType";
+import { ACCOUNT_NOT_VERIFIED_MESSAGE } from "@/src/utils/constants";
+import { useWorkspaceStore } from "@/src/hooks/useWorkspace";
+import generateId from "@/src/services/UUID";
+import { UserSessionType } from "@/src/types/UserSessionType";
+import { TeamType } from "@/src/types/TeamType";
 
 
-    const formLogin = useForm<z.infer<typeof AuthenticationSchema>>({
-        resolver: zodResolver(AuthenticationSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    })
+export default function AuthenticationPage() {
 
-    const formSingUp = useForm<z.infer<typeof createEmailAccountSchema>>({
-        resolver: zodResolver(createEmailAccountSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-            confirmPassword: "",
-            fullName: "",
-            phone: "+244"
-        },
-    })
+	const [showAuthForm, setShowAuthForm] = useState<FormAuth>(FormAuth.EMAIL_LOGIN);
 
-    const [showAuthForm, setShowAuthForm] = useState<FormAuth>(FormAuth.EMAIL_LOGIN);
+	const location = useLocation()
+	const params = new URLSearchParams(location.search)
+	const navigate = useNavigate()
+	const teamId = params.get('teamId')
+	const invited = params.get('invited')
 
-    function onChangeAuthState() {
-        if (showAuthForm === FormAuth.EMAIL_LOGIN) {
-            setShowAuthForm(FormAuth.EMAIL_REGISTER)
-        } else {
-            setShowAuthForm(FormAuth.EMAIL_LOGIN)
-        }
-    }
+	const userPassword = useUserSessionStore(state => state.userPassword)
+	const userFullName = useUserSessionStore(state => state.userFullName)
+	const userEmail = useUserSessionStore(state => state.userEmail)
+	const loadingUserSession = useUserSessionStore(state => state.loadingUserSession)
+	const setUserEmail = useUserSessionStore(state => state.setUserEmail)
+	const setUser = useUserSessionStore(state => state.setUser)
+	const setUserPassword = useUserSessionStore(state => state.setUserPassword)
+	const setUserFullName = useUserSessionStore(state => state.setUserFullName)
+	const setStepsAuth = useUserSessionStore(state => state.setStepsAuth)
+	const createUserWithEmailAndPassword = useUserSessionStore(state => state.createUserWithEmailAndPassword)
+	const signInWithGoogle = useUserSessionStore(state => state.signInWithGoogle)
+	const signInWithEmailAndPassword = useUserSessionStore(state => state.signInWithEmailAndPassword)
+	const addMemberInvited = useUserSessionStore(state => state.addMemberInvited)
 
-    function handleCreateTeamAndWorkspace(session: UserSessionType, teamFromInvitation: TeamType): Promise<UserType> {
-        return new Promise((resolve, reject) => {
-            const user: UserType = {
-                session,
-                teams: [],
-                memberOfTeams: [teamFromInvitation],
-                createdAt: new Date()
-            }
+	const createNewWorkspace = useWorkspaceStore(state => state.createNewWorkspace)
 
-            const teamId = generateId()
+	const onAuthClose = useAppStore(state => state.onModalClose)
 
-            Promise.all([
-                createTeam(user, teamId, "Minha equipa"),
-                createNewWorkspace(
-                    {
-                        createdAt: new Date(),
-                        owner: user,
-                        teamId,
-                        teamName: "Minha equipa"
-                    },
-                    {
-                        workspaceId: generateId(),
-                        workspaceName: "Meu workspace",
-                        workspaceDescription: "Meu workspace",
-                        team: {
-                            createdAt: new Date(),
-                            owner: user,
-                            teamId,
-                            teamName: "Minha equipa"
-                        },
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        isClosed: false,
-                    }
-                )
-            ]).then(() => resolve(user))
-                .catch(reject)
-        })
-    }
+	const createTeam = useTeamStore(state => state.createTeam)
+	const getAllUserTeams = useTeamStore(state => state.getAllUserTeams)
+	const selectCurrentTeam = useTeamStore(state => state.selectCurrentTeam)
+	const resendEmailVerification = useUserSessionStore(state => state.sendEmailVerification)
 
-    function handleGoogleSignIn() {
-        signInWithGoogle()
-            .then((data) => {
+	const { toastMessage, ToastStatus, } = useToastMessage();
 
-                const user = data[0]
-                const isNewUser = data[1]
+	const [sendVerificationLink, setSendVerificationLink] = useState<boolean>(false)
 
-                if (isNewUser) {
-                    if (invited && teamId) {
-                        addMemberInvited(teamId, user.session)
-                            .then((team) => {
-                                handleCreateTeamAndWorkspace(user.session, team)
-                                    .then(() => {
-                                        user.memberOfTeams.push(team)
-                                        setUser(user)
-                                        selectCurrentTeam(team)
-                                        setStepsAuth(StepsAuth.PLANS)
-                                        //setStepsAuth(StepsAuth.HOME)
-                                        //navigate(`/home/${team.teamId}`)
-                                        //onAuthClose()
-                                    })
-                            })
-                            .catch(error => {
-                                setStepsAuth(StepsAuth.CREATE_TEAM)
-                                toastMessage({
-                                    title: error,
-                                    statusToast: ToastStatus.WARNING,
-                                    position: "top-right"
-                                })
-                            })
-                    } else {
-                        setStepsAuth(StepsAuth.CREATE_TEAM)
-                    }
+	useEffect(() => {
+		if (invited) {
+			setUserEmail(invited)
+		}
 
-                } else {
-                    getAllUserTeams(user.session.id)
-                        .then(() => {
-                            setStepsAuth(StepsAuth.HOME)
-                            navigate(`/home`)
-                            /* onAuthClose() */
-                        })
-                        .catch(err => {
-                            toastMessage({
-                                title: err,
-                                statusToast: ToastStatus.ERROR,
-                                position: "top-right"
-                            })
-                        })
-                }
-                onOpenModal()
-            })
-            .catch(err => {
-                toastMessage({
-                    title: err,
-                    statusToast: ToastStatus.ERROR,
-                    position: "top-right"
-                })
-            })
-    }
+	}, [invited])
 
-    function onSubmit(data: z.infer<typeof AuthenticationSchema>) {
-        setUserEmail(data.email)
-        setUserPassword(data.password)
+	function onChangeAuthState() {
+		if (showAuthForm === FormAuth.EMAIL_LOGIN) {
+			setShowAuthForm(FormAuth.EMAIL_REGISTER)
+		} else {
+			setShowAuthForm(FormAuth.EMAIL_LOGIN)
+		}
+	}
 
-        signInWithEmailAndPassword()
-            .then(async (user) => {
-                navigate(`/`)
-            })
-            .catch(err => {
-                toastMessage({
-                    title: err,
-                    statusToast: ToastStatus.ERROR,
-                    position: "top-right"
-                })
-            })
-    }
+	function onForgotPassword() {
+		setStepsAuth(StepsAuth.ACCOUNTRECOVEVY)
+	}
 
-    const [isModalOpen, setIsOpenModal] = useState(false)
+	function handleCreateTeamAndWorkspace(session: UserSessionType, teamFromInvitation: TeamType): Promise<UserType> {
+		return new Promise((resolve, reject) => {
+			const user: UserType = {
+				session,
+				teams: [],
+				memberOfTeams: [teamFromInvitation],
+				createdAt: new Date()
+			}
+
+			const teamId = generateId()
+
+			Promise.all([
+				createTeam(user, teamId, "Minha equipa"),
+				createNewWorkspace(
+					{
+						createdAt: new Date(),
+						owner: user,
+						teamId,
+						teamName: "Minha equipa"
+					},
+					{
+						workspaceId: generateId(),
+						workspaceName: "Meu workspace",
+						workspaceDescription: "Meu workspace",
+						team: {
+							createdAt: new Date(),
+							owner: user,
+							teamId,
+							teamName: "Minha equipa"
+						},
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						isClosed: false,
+					}
+				)
+			]).then(() => resolve(user))
+				.catch(reject)
+		})
+	}
 
 
-    const onCloseModal = () => {
-        setIsOpenModal(false)
-    }
-    const onOpenModal = () => {
-        setIsOpenModal(true)
-    }
+	function handleRegisterWithEmailAndPassword() {
+		createUserWithEmailAndPassword()
+			.then((session) => {
+				if (invited && teamId) {
+					addMemberInvited(teamId, session)
+						.then((team) => {
+							handleCreateTeamAndWorkspace(session, team)
+								.then((user) => {
+									setUser(user)
+									selectCurrentTeam(team)
+									setStepsAuth(StepsAuth.PLANS)
+									//setStepsAuth(StepsAuth.EMAIL_VERIFICATION)
+								})
+						})
+						.catch(error => {
+							setStepsAuth(StepsAuth.CREATE_TEAM)
+							toastMessage({
+								title: "Adicionar na equipe",
+								description: error,
+								statusToast: ToastStatus.WARNING,
+								position: "bottom"
+							})
+						})
+				} else {
+					setStepsAuth(StepsAuth.CREATE_TEAM)
+				}
+			})
+			.catch(err => {
+				toastMessage({
+					title: "Criar conta",
+					description: err,
+					statusToast: ToastStatus.ERROR,
+					position: "bottom"
+				})
+			})
+	}
 
+	function handleLoginWithEmailAndPassword() {
+		signInWithEmailAndPassword()
+			.then(async (user) => {
 
-    return (
-        <>
-            {showAuthForm === FormAuth.EMAIL_LOGIN && (
-                <LoginForm
-                    form={formLogin}
-                    handleGoogleSignIn={handleGoogleSignIn}
-                    onSubmit={onSubmit}
-                    onChangeAuthState={onChangeAuthState}
-                />
-            )}
+				getAllUserTeams(user.session.id)
+					.then(() => {
+						setStepsAuth(StepsAuth.HOME)
+						navigate(`/home`)
+						onAuthClose()
+					})
+					.catch(err => {
+						toastMessage({
+							title: "Entrar na conta",
+							description: err,
+							statusToast: ToastStatus.ERROR,
+							position: "bottom"
+						})
+					})
+			})
+			.catch(err => {
+				if (err === ACCOUNT_NOT_VERIFIED_MESSAGE) {
+					setSendVerificationLink(true)
 
-            {showAuthForm === FormAuth.EMAIL_REGISTER && (
-                <SignUpForm
-                    form={formSingUp}
-                    handleGoogleSignIn={handleGoogleSignIn}
-                    onSubmit={onSubmit}
-                    onChangeAuthState={onChangeAuthState}
-                />
-            )}
+					toastMessage({
+						title: "Entrar na conta",
+						description: err,
+						statusToast: ToastStatus.ERROR,
+						position: "bottom"
+					})
+				} else {
+					toastMessage({
+						title: "Entrar na conta",
+						description: err,
+						statusToast: ToastStatus.ERROR,
+						position: "bottom"
+					})
+				}
+			})
+	}
 
-            <WorkSyncModal
-                isOpen={isModalOpen}
-                onClose={() => console.log}
-                title='Bem vindo ao Work Sync'
-                subtitle='Faça login ou registe-se e desfrute de recursos exclusivos.'
-            >
-                {
-                    stepsAuth === StepsAuth.CREATE_PROJECT ?
-                        <CreateWorkSpacePage 
-                        />
-                        :
-                        stepsAuth === StepsAuth.EMAIL_VERIFICATION ?
-                            <h1>Verificar o email</h1>
-                            :
-                            stepsAuth === StepsAuth.PLANS ?
-                                <h1>Planos</h1>
-                                :
-                                stepsAuth === StepsAuth.ACCOUNTRECOVEVY ?
-                                    <h1>Recuperar conta</h1>
-                                    :
-                                    <CreateTeamPage buttonText='Seguinte' />
+	function handleGoogleSignIn() {
+		signInWithGoogle()
+			.then((data) => {
 
+				const user = data[0]
+				const isNewUser = data[1]
 
-                }
-            </WorkSyncModal>
+				if (isNewUser) {
+					if (invited && teamId) {
+						addMemberInvited(teamId, user.session)
+							.then((team) => {
+								handleCreateTeamAndWorkspace(user.session, team)
+									.then(() => {
+										user.memberOfTeams.push(team)
+										setUser(user)
+										selectCurrentTeam(team)
+										setStepsAuth(StepsAuth.PLANS)
+										//setStepsAuth(StepsAuth.HOME)
+										//navigate(`/home/${team.teamId}`)
+										//onAuthClose()
+									})
+							})
+							.catch(error => {
+								setStepsAuth(StepsAuth.CREATE_TEAM)
+								toastMessage({
+									title: "Adicionar na equipe",
+									description: error,
+									statusToast: ToastStatus.WARNING,
+									position: "bottom"
+								})
+							})
+					} else {
+						setStepsAuth(StepsAuth.CREATE_TEAM)
+					}
 
-        </>
+				} else {
+					getAllUserTeams(user.session.id)
+						.then(() => {
+							setStepsAuth(StepsAuth.HOME)
+							navigate(`/home`)
+							onAuthClose()
+						})
+						.catch(err => {
+							toastMessage({
+								title: "Continuar com o google",
+								description: err,
+								statusToast: ToastStatus.ERROR,
+								position: "bottom"
+							})
+						})
+				}
+			})
+			.catch(err => {
+				toastMessage({
+					title: "Continuar com o google",
+					description: err,
+					statusToast: ToastStatus.ERROR,
+					position: "bottom"
+				})
+			})
+	}
 
-    )
+	function handleAuthOperation() {
+		if (showAuthForm === FormAuth.EMAIL_LOGIN) {
+			handleLoginWithEmailAndPassword()
+		} else {
+			handleRegisterWithEmailAndPassword()
+		}
+	}
+
+	function handleTextButtonAuthOperation(): string {
+		if (showAuthForm === FormAuth.EMAIL_LOGIN) {
+			return "Entra na conta"
+		}
+		return "Criar conta"
+	}
+
+	function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+		if (e.key === "Enter") {
+			handleAuthOperation()
+		}
+	}
+
+	function handleSendEmailVerification() {
+		resendEmailVerification()
+			.then(() => {
+				toastMessage({
+					title: "Email de verificação de conta",
+					description: "E-mail enviado com sucesso",
+					statusToast: ToastStatus.SUCCESS,
+					position: "bottom"
+				})
+			})
+			.catch(() => {
+				toastMessage({
+					title: "Email de verificação de conta",
+					description: "Erro ao enviar e-mail",
+					statusToast: ToastStatus.ERROR,
+					position: "bottom"
+				})
+			})
+	}
+
+	return (
+		<Box as="form">
+			<CreateEmailAccountForm
+				showAuthForm={showAuthForm}
+				fullName={userFullName}
+				email={userEmail}
+				password={userPassword}
+				onChangeFullName={setUserFullName}
+				onChangeEmail={setUserEmail}
+				onChangePassword={setUserPassword}
+			/>
+
+			<LoginEmailAccountForm
+				email={userEmail}
+				password={userPassword}
+				showAuthForm={showAuthForm}
+				onKeyDown={onKeyDown}
+				onChangeEmail={setUserEmail}
+				onChangePassword={setUserPassword}
+				onClickToRecoverPassword={onForgotPassword}
+			/>
+
+			<Spacer height={4} />
+
+			<ZentaakButton
+				variant="primary"
+				width="100%"
+				mt="5"
+				isDisabled={userEmail === "" || userPassword === ""}
+				isLoading={loadingUserSession}
+				_disabled={{ background: "red.100", opacity: 0.5 }}
+				onClick={handleAuthOperation}
+			>
+				{handleTextButtonAuthOperation()}
+			</ZentaakButton>
+			{
+				sendVerificationLink ?
+					<ZentaakButton
+						mt={2}
+						variant='link'
+						onClick={handleSendEmailVerification}
+						w='100%'
+					>
+						<Text
+							as='u'
+							fontSize='12px'
+							alignSelf={'center'}
+						>
+							Reenviar e-mail de verificação
+						</Text>
+					</ZentaakButton>
+					: null
+			}
+			<DividerAuth />
+			{
+				showAuthForm === FormAuth.EMAIL_LOGIN ?
+					<SocialAuth
+						googleTitleButton="Entrar com o Google"
+						phoneNumberTitleButton="Entrar com o Telefone"
+						emailTitleButton="Entrar com o E-mail"
+						hasAlreadyAccount={onChangeAuthState}
+						onGoogleSignIn={handleGoogleSignIn}
+						type={1}
+					/>
+					:
+					<SocialAuth
+						googleTitleButton="Regista-se com o Google"
+						phoneNumberTitleButton="Regista-se com o Telefone"
+						emailTitleButton="Regista-se com o E-mail"
+						hasAlreadyAccount={onChangeAuthState}
+						onGoogleSignIn={handleGoogleSignIn}
+						type={0}
+					/>
+			}
+		</Box>
+	);
 }

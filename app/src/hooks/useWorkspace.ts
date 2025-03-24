@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { TeamType } from "../types/TeamType";
+import WorkspaceService from "../services/firebase/firestore/WorkspaceService";
+import { WorkspaceType } from "../types/WorkspaceType";
 import generateId from "../services/UUID";
 import { Unsubscribe } from "firebase/firestore";
-import { WorkspaceType } from "../types/WorkspaceType";
-import WorkspaceService from "../services/firebase/firestore/WorkspaceService";
 
 interface State {
     workspaceName: string
@@ -33,7 +33,7 @@ const initialStates: State = {
     infoMessage: "",
     workspaces: [],
     workspace: undefined,
-    loadingWorkspaces: false,
+    loadingWorkspaces: true,
     errorWorkspace: null,
 }
 
@@ -46,7 +46,7 @@ export const useWorkspaceStore = create<Actions & State>()(
             setWorkspace: (workspace: WorkspaceType | undefined) => set({ workspace }),
             setWorkspaces: (workspaces: WorkspaceType[]) => set({ workspaces }),
             createNewWorkspace: async (team: TeamType, myWorkspace?: WorkspaceType) => {
-                set({ loadingWorkspaces: true })
+
                 const { workspaceName, workspaceDescription } = get()
 
                 if (myWorkspace) {
@@ -78,7 +78,7 @@ export const useWorkspaceStore = create<Actions & State>()(
                             updatedAt: new Date(),
                             isClosed: false,
                         }
-
+    
                         try {
                             await WorkspaceService.shared.createNewWorkspace(workspace)
                             set({

@@ -1,7 +1,8 @@
+import { UserSessionType } from "@/src/types/UserSessionType";
 import { Auth, AuthError, AuthErrorCodes, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updateProfile, sendEmailVerification, confirmPasswordReset } from "firebase/auth";
 import UserService from "../firestore/UserService";
+import { UserType } from "@/src/types/UserType";
 import AuthenticationService from "./AuthenticationService";
-import { UserSessionType, UserType } from "@/src/types";
 
 export default class EmailAndPasswordService extends AuthenticationService {
     auth: Auth;

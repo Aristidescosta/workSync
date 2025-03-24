@@ -1,7 +1,8 @@
+import { UserSessionType } from "@/src/types/UserSessionType";
 import { Auth, GoogleAuthProvider, getAuth, signInWithPopup, getAdditionalUserInfo, AuthError, AuthErrorCodes } from "firebase/auth";
-import AuthenticationService from "./AuthenticationService";
-import { UserSessionType, UserType } from "@/src/types";
 import UserService from "../firestore/UserService";
+import { UserType } from "@/src/types/UserType";
+import AuthenticationService from "./AuthenticationService";
 
 
 export default class GoogleAuthService extends AuthenticationService {
@@ -56,7 +57,6 @@ export default class GoogleAuthService extends AuthenticationService {
                     }
                 })
                 .catch((error: AuthError) => {
-                    console.error("Erro: ", error)
                     switch (error.code) {
                         case AuthErrorCodes.CAPTCHA_CHECK_FAILED:
                             reject("Ocorre um erro com um recaptcha. Faça um refresh no navegador e tente novamente")
